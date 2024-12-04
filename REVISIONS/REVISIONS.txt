@@ -1,0 +1,15 @@
+REVISIONS
+
+hello po! eto po yung pinapabago sa system namin. pwede po bang padagdag nito?
+
+1. Green ang theme ng system 
+- Wag na daw pong gradient kasi masakit daw po sa mata
+
+2. Lagyan ng Total Sales
+
+3. Graphs para sa Sales and Reports
+- Example 1: Line Graph of Sales every month to see which month has the highest sales
+- Example 2: Bar Graph on which category has the highest sales
+- Example 3: Top 10 items that has the most sold sa particular year
+
+4. Data Privacy Notice

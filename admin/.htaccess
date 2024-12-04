@@ -1,0 +1,19 @@
+RewriteEngine On
+
+# Rewrite 'submit_action' to 'forms_code.php'
+RewriteRule ^forgot_pword$ forms_code.php [L]
+
+# Rewrite 'login' to 'forms_code.php'
+RewriteRule ^login$ forms_code.php [L]
+
+# Rewrite 'verifyotpcodeAdmin' to 'forms_code.php'
+RewriteRule ^verifyotpcodeAdmin$ forms_code.php [L]
+
+# Rewrite 'verifyotpcode' to 'forms_code.php'
+RewriteRule ^verifyotpcode$ forms_code.php [L]
+
+# Rewrite 'enterpword' to 'forms_code.php'
+RewriteRule ^enterpword$ forms_code.php [L]
+
+# Rewrite 'updatepwrd' to 'forms_code.php'
+RewriteRule ^updatepwrd$ forms_code.php [L]
