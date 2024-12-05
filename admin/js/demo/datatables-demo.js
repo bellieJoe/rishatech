@@ -5,6 +5,10 @@ $(document).ready(function() {
   });
 
   $('#dataTables_Category').DataTable({
+    "order": [[0, "asc"]]  // Sort by the first column (index 0) in descending order
+  });
+
+  $('#dataTables_Brands').DataTable({
     "order": [[0, "desc"]]  // Sort by the first column (index 0) in descending order
   });
 

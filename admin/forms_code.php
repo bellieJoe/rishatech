@@ -599,13 +599,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updateAdminInfo'])) {
         $admin_id = sanitizeInput($_POST['admin_id']);
         $appliance_name = sanitizeInput($_POST['appliance_name']);
         $category = sanitizeInput($_POST['category']);
+        $brand = sanitizeInput($_POST['brand']);
         $price = sanitizeInput($_POST['price']);
         $quantity = sanitizeInput($_POST['quantity']);
         $status = 'Available';
         $unit_measurement = sanitizeInput($_POST['unit_measurement']);
-        
-
-        $insertAppliances = $db->insertAppliances($admin_id, $appliance_name, $category, $price, $quantity, $unit_measurement, $status);
+        // echo $brand." ".$category;
+        // exit();
+        $insertAppliances = $db->insertAppliances($admin_id, $appliance_name, $category, $brand, $price, $quantity, $unit_measurement, $status);
 
         if ($insertAppliances) {
 
@@ -631,12 +632,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updateAdminInfo'])) {
         $appliances_id = sanitizeInput($_POST['appliances_id']);
         $appliance_name = sanitizeInput($_POST['appliance_name']);
         $category = sanitizeInput($_POST['category']);
+        $brand = sanitizeInput($_POST['brand']);
         $price = sanitizeInput($_POST['price']);
         $quantity = sanitizeInput($_POST['quantity']);
         $status = sanitizeInput($_POST['status']);
         $unit_measurement = sanitizeInput($_POST['unit_measurement']);
 
-        $updateAppliances = $db->updateAppliances($appliances_id, $appliance_name, $category, $price, $quantity, $unit_measurement, $status);
+        $updateAppliances = $db->updateAppliances($appliances_id, $appliance_name, $category,$brand, $price, $quantity, $unit_measurement, $status);
 
         if ($updateAppliances) {
 
@@ -1352,59 +1354,148 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
 
 /*
  * START OF REVISIONS
- * CLIENT @credits ICTSC.DEVS
+ * @credits ICTSC.DEVS
 */
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['RegisterCustomer'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['RegisterCustomer'])) {
 
-    try {
-        // $admin_id = sanitizeInput($_POST['admin_id']);
-        $full_name = sanitizeInput($_POST['full_name']);
-        $complete_address = sanitizeInput($_POST['complete_address']);
-        $municipality = sanitizeInput($_POST['municipality']);
-        $barangay = sanitizeInput($_POST['barangay']);
-        $street_name = sanitizeInput($_POST['street_name']);
-        $email_address = sanitizeInput($_POST['email_address']);
-        $phoneNumber = sanitizeInput($_POST['phoneNumber']);
-        $age = sanitizeInput($_POST['age']);
-        $civil_status = sanitizeInput($_POST['civil_status']);
-        $Citizenship = sanitizeInput($_POST['Citizenship']);
+        try {
+            // $admin_id = sanitizeInput($_POST['admin_id']);
+            $full_name = sanitizeInput($_POST['full_name']);
+            $complete_address = sanitizeInput($_POST['complete_address']);
+            $municipality = sanitizeInput($_POST['municipality']);
+            $barangay = sanitizeInput($_POST['barangay']);
+            $street_name = sanitizeInput($_POST['street_name']);
+            $email_address = sanitizeInput($_POST['email_address']);
+            $phoneNumber = sanitizeInput($_POST['phoneNumber']);
+            $age = sanitizeInput($_POST['age']);
+            $civil_status = sanitizeInput($_POST['civil_status']);
+            $Citizenship = sanitizeInput($_POST['Citizenship']);
 
-        $username = sanitizeInput($_POST['username']);
-        $password = sanitizeInput($_POST['password']);
-        $hash_password = password_hash($password, PASSWORD_DEFAULT);
-
-
+            $username = sanitizeInput($_POST['username']);
+            $password = sanitizeInput($_POST['password']);
+            $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
 
-        $registerCustomer = $db->registerCustomer(1, $full_name, $complete_address, $municipality, $barangay, $street_name, $email_address, $phoneNumber, $age, $civil_status, $Citizenship, $username, $hash_password);
 
-        if(!$registerCustomer) {
-            header("location: ".BASE_URL."/client/registration.php");
+
+            $registerCustomer = $db->registerCustomer(1, $full_name, $complete_address, $municipality, $barangay, $street_name, $email_address, $phoneNumber, $age, $civil_status, $Citizenship, $username, $hash_password);
+
+            if(!$registerCustomer) {
+                header("location: ".BASE_URL."/client/registration.php");
+                $_SESSION['message'] = [
+                    "status" => "error",
+                    "message" => "ERROR! Failed to register a customer. Try again."
+                ];
+                exit();
+            }
+
+            
+            $_SESSION['message'] = [
+                "status" => "success",
+                "message" => "Customer registered successfully."
+            ];
+            header("location: ".BASE_URL."/client/index.php");
+            exit();
+
+        } catch (\Throwable $th) {
+            echo $th;
             $_SESSION['message'] = [
                 "status" => "error",
-                "message" => "ERROR! Failed to register a customer. Try again."
+                "message" => "An unexpected error occured while registering a customer. Try again."
             ];
+            header("location: ".BASE_URL."/client/registration.php");
+            exit();
+        }
+    }
+
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['AddBrand'])) {
+
+        $brand_name = sanitizeInput($_POST['brand_name']);
+        $admin_id = sanitizeInput($_POST['admin_id']);
+
+        $insertBrand = $db->insertBrand($admin_id, $brand_name);
+
+        if ($insertBrand) {
+
+            $_SESSION['status'] = "Brand Added";
+            $_SESSION['status-code'] = "success";
+            header("location: route.php?route=appliances");
+            exit();
+        
+        } else {
+
+            $_SESSION['status'] = "ERROR! Failed to add brand. Try Again.";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=appliances");
             exit();
         }
 
-        
-        $_SESSION['message'] = [
-            "status" => "success",
-            "message" => "Customer registered successfully."
-        ];
-        header("location: ".BASE_URL."/client/index.php");
-        exit();
-
-    } catch (\Throwable $th) {
-        echo $th;
-        $_SESSION['message'] = [
-            "status" => "error",
-            "message" => "An unexpected error occured while registering a customer. Try again."
-        ];
-        header("location: ".BASE_URL."/client/registration.php");
-        exit();
     }
-}
+
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['UpdateBrand'])) {
+
+        $brand_id = sanitizeInput($_POST['brand_id']);
+        $brand_name = sanitizeInput($_POST['brand_name']);
+
+        $updateBrand = $db->updateBrand($brand_name, $brand_id);
+
+        if ($updateBrand) {
+
+            $_SESSION['status'] = "Brand Updated";
+            $_SESSION['status-code'] = "success";
+            header("location: route.php?route=appliances");
+            exit();
+        
+        } else {
+
+            $_SESSION['status'] = "ERROR! Failed to update Brand. Try Again.";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=appliances");
+            exit();
+        }
+
+    }
+
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['DeleteBrand'])) {
+
+        $brand_id = sanitizeInput($_POST['brand_id']);
+
+        $countBrandAppliances = $db->countBrandAppliances($brand_id);
+
+        if ($countBrandAppliances > 0) {
+            $_SESSION['status'] = "Brand has appliances. Cannot delete.";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=appliances");
+            exit();
+        }
+
+        $deleteBrand= $db->deleteBrand($brand_id);
+
+        if ($deleteBrand) {
+
+            $_SESSION['status'] = "Brand Deleted";
+            $_SESSION['status-code'] = "success";
+            header("location: route.php?route=appliances");
+            exit();
+        
+        } else {
+
+            $_SESSION['status'] = "ERROR! Failed to delete Brand. Try Again.";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=appliances");
+            exit();
+
+        }
+
+    }
+
+/*
+ * END OF REVISIONS
+ * @credits ICTSC.DEVS
+*/
 
 
 

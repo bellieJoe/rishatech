@@ -246,7 +246,9 @@ public function deleteCategory($category_id) {
 public function selectAllappliances() {
     $connection = $this->getConnection();
 
-    $stmt = $connection->prepare("SELECT *, appliances.id AS AppliancesID, category.id AS cat_id FROM appliances LEFT JOIN category ON appliances.category_id = category.id");
+    $stmt = $connection->prepare("SELECT *, appliances.id AS AppliancesID, category.id AS cat_id FROM appliances 
+                                    LEFT JOIN category ON appliances.category_id = category.id
+                                    LEFT JOIN brands ON appliances.brand_id = brands.id");
     $stmt->execute();
 
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -307,21 +309,21 @@ public function selectAllItemsQty($qty) {
 
 
 //-------------------------------------------------------------------------------------------------------ADD APPLIANCES
-public function insertAppliances($admin_id, $appliance_name, $category, $price, $quantity, $unit_measurement, $status) {
+public function insertAppliances($admin_id, $appliance_name, $category, $brand, $price, $quantity, $unit_measurement, $status) {
     $connection = $this->getConnection();
 
-    $stmt = $connection->prepare("INSERT INTO appliances(admin_id, appliances_name, category_id, price, qty, unit_measurement, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $result = $stmt->execute([$admin_id, $appliance_name, $category, $price, $quantity, $unit_measurement, $status]);
+    $stmt = $connection->prepare("INSERT INTO appliances(admin_id, appliances_name, category_id, brand_id, price, qty, unit_measurement, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $result = $stmt->execute([$admin_id, $appliance_name, $category, $brand, $price, $quantity, $unit_measurement, $status]);
 
     return $result;
 }
 
 //-----------------------------------------------------------------------------------------------------UPDATE APPLIANCES
-public function updateAppliances($appliances_id, $appliance_name, $category, $price, $quantity, $unit_measurement, $status) {
+public function updateAppliances($appliances_id, $appliance_name, $category,$brand, $price, $quantity, $unit_measurement, $status) {
     $connection = $this->getConnection();
 
-    $stmt = $connection->prepare("UPDATE appliances SET appliances_name = ?, category_id = ?, price = ?, qty = ?, unit_measurement = ?, status = ? WHERE id = ? ");
-    $result = $stmt->execute([$appliance_name, $category, $price, $quantity, $unit_measurement, $status, $appliances_id]);
+    $stmt = $connection->prepare("UPDATE appliances SET appliances_name = ?, category_id = ?, brand_id = ?, price = ?, qty = ?, unit_measurement = ?, status = ? WHERE id = ? ");
+    $result = $stmt->execute([$appliance_name, $category, $brand, $price, $quantity, $unit_measurement, $status, $appliances_id]);
 
     return $result;
 }
@@ -939,6 +941,59 @@ public function getClientUserByUsername($username) {
 
     return $result;
 }
+
+/* 
+    BRANDS
+*/
+public function insertBrand($admin_id, $brand_name) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("INSERT INTO brands(admin_id, brand_name) VALUES (?, ?)");
+    $result = $stmt->execute([$admin_id, $brand_name]);
+
+    return $result;
+}
+
+public function selectAllBrands() {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM brands");
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function updateBrand($brand_name, $brand_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE brands SET brand_name = ? WHERE id = ? ");
+    $result = $stmt->execute([$brand_name, $brand_id]);
+
+    return $result;
+}
+
+public function deleteBrand($brand_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("DELETE FROM brands WHERE id = ? ");
+    $result = $stmt->execute([$brand_id]);
+
+    return $result;
+}
+
+public function countBrandAppliances($brand_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT COUNT(*) FROM appliances WHERE brand_id = ?");
+    $stmt->execute([$brand_id]);
+
+    $result = $stmt->fetchColumn();
+
+    return $result;
+}
+
 
 }
 
