@@ -994,6 +994,26 @@ public function countBrandAppliances($brand_id) {
     return $result;
 }
 
+public function updateCreditLimit($customer_id, $credit_limit) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE customers SET credit_limit = ? WHERE id = ? ");
+    $result = $stmt->execute([$credit_limit, $customer_id]);    
+
+    return $result;
+}
+
+public function getCustomerByID($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM customers WHERE id = ?");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
 
 }
 

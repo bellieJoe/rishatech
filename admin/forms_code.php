@@ -1088,6 +1088,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
             exit();
         }
 
+        $customer = $db->getCustomerByID($customer_id);
+
+        if(!$customer) {
+            $_SESSION['status'] = "Customer Not Existing";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=allsales");
+            exit();
+        }
+
+        if($payment_type == 'Credit' && $customer['credit_limit'] < $total_sales) {
+            $_SESSION['status'] = "Customer Credit Limit is not enough";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=allsales");
+            exit();
+        }
+
 
         // Insert Customer Sales with the updated total_sales
         $insertCustomerSales = $db->insertCustomerSales($admin_id, $customer_id, $appliances_id, $qty, $total_sales, $discount, $payment_type, $payment_method, $transaction_number, $months_to_pay, $monthly_payment, $downpayment, $interest, $status, $currentDate);
@@ -1491,6 +1507,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
         }
 
     }
+
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['UpdateCreditLimit'])) {
+
+        $customer_id = sanitizeInput($_POST['customer_id']);
+        $credit_limit = sanitizeInput($_POST['credit_limit']);
+
+        $updateCreditLimit = $db->updateCreditLimit($customer_id, $credit_limit);
+
+        if ($updateCreditLimit) {
+
+            $_SESSION['status'] = "Credit Limit Updated";
+            $_SESSION['status-code'] = "success";
+            header("location: route.php?route=customers");
+            exit();
+        
+        } else {
+
+            $_SESSION['status'] = "ERROR! Failed to update Credit Limit. Try Again.";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=customers");
+            exit();
+        }
+
+    }
+
 
 /*
  * END OF REVISIONS
