@@ -886,37 +886,59 @@ public function deleteDiscountPromotion($discount_id) {
 }
 
 
+    //-------------------------------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------------------------------------------------
+        
+/* 
+    START OF REVISIONS
+    @credits ICTSC.DEVS
+*/
+public function getTowns() {
+    $connection = $this->getConnection();
 
+    $stmt = $connection->prepare("SELECT * FROM towns");
+    $stmt->execute();
 
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    return $result;
+}
 
+public function getBarangays() {
+    $connection = $this->getConnection();
 
+    $stmt = $connection->prepare("SELECT * FROM barangays");
+    $stmt->execute();
 
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    return $result;
+}
 
+public function registerCustomer($admin_id, $full_name, $complete_address, $municipality, $barangay, $street_name, $email_address, $phoneNumber, $age, $civil_status, $Citizenship, $username, $password) {
+    $connection = $this->getConnection();
 
+    $stmt = $connection->prepare("INSERT INTO users(username, password, active) VALUES (?, ?, 1)");
+    $result = $stmt->execute([$username, $password]);
 
+    $user_id = $connection->lastInsertId();
+    
+    $stmt = $connection->prepare("INSERT INTO customers(admin_id, full_name, complete_address, municipality, barangay, street_name, email, phone_number, age, civil_status, citizenship, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $result = $stmt->execute([$admin_id, $full_name, $complete_address, $municipality, $barangay, $street_name, $email_address, $phoneNumber, $age, $civil_status, $Citizenship, $user_id]);
 
+    return $result;
+}
 
+public function getClientUserByUsername($username) {
+    $connection = $this->getConnection();   
 
+    $stmt = $connection->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->execute([$username]);
 
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
-
-
-
-
-
-
-
-
-
-
-
-//-------------------------------------------------------------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------------------------------------------------------------
-
-
+    return $result;
+}
 
 }
 

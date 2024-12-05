@@ -14,15 +14,21 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary static-top">
       <div class="container">
-        <a class="navbar-brand" href="#"><i class="fa fa-home"></i> RISHATECH CLIENT</a>
+        <a class="navbar-brand" href="#"><i class="fa fa-home"></i> RISHATECH</a>
       </div>
     </nav>
     
+    <section class="py-5">
+        <div class="container">
+            <img src="./admin/img/bg.png" alt="" class="img-fluid mx-auto d-block" style="height: 300px; object-fit: cover; object-position: center;">
+            <h1 class="text-center">Welcome to RISHATECH</h1>
+        </div>
+    </section>
 
     <section class="py-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3">
                     <div class="card border-primary">
                         <div class="card-header text-primary text-center">
                             <h5 class="card-title">Client Interface</h5>
@@ -33,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3">
                     <div class="card border-primary">
                         <div class="card-header text-primary text-center">
                             <h5 class="card-title">Admin Interface</h5>

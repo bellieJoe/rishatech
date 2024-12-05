@@ -1,4 +1,6 @@
 <?php
+
+require_once '../app/config/constants.php';
 include '../db_connection/config.php';
 $db = new Database();
  
@@ -1342,37 +1344,70 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
 
     header("location: route.php?route=discount_promotions");
     exit();
+}  
+// } else {
+//     echo "<script>alert('Invalid CSRF Token test!'); window.location.href = 'index.php?route=home';</script>";
+// }
+
+
+/*
+ * START OF REVISIONS
+ * CLIENT @credits ICTSC.DEVS
+*/
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['RegisterCustomer'])) {
+
+    try {
+        // $admin_id = sanitizeInput($_POST['admin_id']);
+        $full_name = sanitizeInput($_POST['full_name']);
+        $complete_address = sanitizeInput($_POST['complete_address']);
+        $municipality = sanitizeInput($_POST['municipality']);
+        $barangay = sanitizeInput($_POST['barangay']);
+        $street_name = sanitizeInput($_POST['street_name']);
+        $email_address = sanitizeInput($_POST['email_address']);
+        $phoneNumber = sanitizeInput($_POST['phoneNumber']);
+        $age = sanitizeInput($_POST['age']);
+        $civil_status = sanitizeInput($_POST['civil_status']);
+        $Citizenship = sanitizeInput($_POST['Citizenship']);
+
+        $username = sanitizeInput($_POST['username']);
+        $password = sanitizeInput($_POST['password']);
+        $hash_password = password_hash($password, PASSWORD_DEFAULT);
+
+
+
+
+        $registerCustomer = $db->registerCustomer(1, $full_name, $complete_address, $municipality, $barangay, $street_name, $email_address, $phoneNumber, $age, $civil_status, $Citizenship, $username, $hash_password);
+
+        if(!$registerCustomer) {
+            header("location: ".BASE_URL."/client/registration.php");
+            $_SESSION['message'] = [
+                "status" => "error",
+                "message" => "ERROR! Failed to register a customer. Try again."
+            ];
+            exit();
+        }
+
+        
+        $_SESSION['message'] = [
+            "status" => "success",
+            "message" => "Customer registered successfully."
+        ];
+        header("location: ".BASE_URL."/client/index.php");
+        exit();
+
+    } catch (\Throwable $th) {
+        echo $th;
+        $_SESSION['message'] = [
+            "status" => "error",
+            "message" => "An unexpected error occured while registering a customer. Try again."
+        ];
+        header("location: ".BASE_URL."/client/registration.php");
+        exit();
+    }
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-} else {
-    echo "<script>alert('Invalid CSRF Token!'); window.location.href = 'index.php?route=home';</script>";
 }
 
 ?>
