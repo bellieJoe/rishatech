@@ -1104,6 +1104,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
             exit();
         }
 
+        // update customers credit limit here
+
 
         // Insert Customer Sales with the updated total_sales
         $insertCustomerSales = $db->insertCustomerSales($admin_id, $customer_id, $appliances_id, $qty, $total_sales, $discount, $payment_type, $payment_method, $transaction_number, $months_to_pay, $monthly_payment, $downpayment, $interest, $status, $currentDate);
@@ -1289,17 +1291,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Add_Discounts'])) {
     $admin_id = sanitizeInput($_POST['admin_id']);
     $name = sanitizeInput($_POST['name']);
     $type_of_discount = sanitizeInput($_POST['type_of_discount']);
+    $payment_type = sanitizeInput($_POST['payment_type']);
 
     // Sanitize and convert to decimal percentages
-    $downpayment_percentage = sanitizeInput($_POST['downpayment_percentage']) / 100;
-    $interest_percentage = sanitizeInput($_POST['interest_percentage']) / 100;
+    $downpayment_percentage = in_array($payment_type, ["Both", "Credit"]) ? sanitizeInput($_POST['downpayment_percentage']) / 100 : null;
+    $interest_percentage = in_array($payment_type, ["Both", "Credit"]) ? sanitizeInput($_POST['interest_percentage']) / 100 : null;
+    $cash_discount_percentage = in_array($payment_type, ["Both", "Cash"]) ? sanitizeInput($_POST['cash_discount_percentage']) / 100 : null;
 
     $eligible = sanitizeInput($_POST['eligible']);
     $start_date = sanitizeInput($_POST['start_date']);
     $end_date = sanitizeInput($_POST['end_date']);
     $terms = sanitizeInput($_POST['terms']);
 
-    $insertDiscount_Promotions = $db->insertDiscount_Promotions($admin_id, $name, $type_of_discount, $downpayment_percentage, $interest_percentage, $eligible, $start_date, $end_date, $terms);
+    $insertDiscount_Promotions = $db->insertDiscount_Promotions($admin_id, $name, $type_of_discount, $payment_type, $cash_discount_percentage, $downpayment_percentage, $interest_percentage, $eligible, $start_date, $end_date, $terms);
 
     if ($insertDiscount_Promotions) {
         $_SESSION['status'] = "Discount/Promotion Added";
@@ -1321,15 +1325,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Edit_Discounts'])) {
     $discount_id = sanitizeInput($_POST['discount_id']);
     $name = sanitizeInput($_POST['name']);
     $type_of_discount = sanitizeInput($_POST['type_of_discount']);
-    $downpayment_percentage = sanitizeInput($_POST['downpayment_percentage']) / 100;
-    $interest_percentage = sanitizeInput($_POST['interest_percentage']) / 100;
+    $payment_type = sanitizeInput($_POST['payment_type']);
+    $cash_discount_percentage =  in_array($payment_type, ["Both", "Cash"]) ? sanitizeInput($_POST['cash_discount_percentage']) / 100 : null;
+    $downpayment_percentage = in_array($payment_type, ["Both", "Credit"]) ? sanitizeInput($_POST['downpayment_percentage']) / 100 : null;
+    $interest_percentage = in_array($payment_type, ["Both", "Credit"]) ? sanitizeInput($_POST['interest_percentage']) / 100 : null;
     $eligible = sanitizeInput($_POST['eligible']);
     $start_date = sanitizeInput($_POST['start_date']);
     $end_date = sanitizeInput($_POST['end_date']);
     $terms = sanitizeInput($_POST['terms']);
 
     // Call your update function
-    $updateDiscountPromotion = $db->updateDiscountPromotion($discount_id, $name, $type_of_discount, $downpayment_percentage, $interest_percentage, $eligible, $start_date, $end_date, $terms);
+    $updateDiscountPromotion = $db->updateDiscountPromotion($discount_id, $name, $type_of_discount, $payment_type, $cash_discount_percentage, $downpayment_percentage, $interest_percentage, $eligible, $start_date, $end_date, $terms);
 
     if ($updateDiscountPromotion) {
         $_SESSION['status'] = "Discount/Promotion Updated";

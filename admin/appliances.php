@@ -657,4 +657,12 @@ unset($_SESSION['status']);
 }
 ?>
 
+<script>
+    $(document).ready(function() {
+        $('#dataTables_Brand').DataTable({
+            "order": [[0, "desc"]]
+        });
+    })
+</script>
+
 </html>

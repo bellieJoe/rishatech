@@ -816,16 +816,16 @@ public function deletecUSTOMERcREDITpayment($customer_id) {
 //------------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------------ADD DISCOUNTS AND PROMOTIONS
 public function insertDiscount_Promotions(
-    $admin_id, $name, $type_of_discount, 
-    $downpayment_percentage, $interest_percentage, 
+    $admin_id, $name, $type_of_discount, $payment_type,
+    $cash_discount_percentage, $downpayment_percentage, $interest_percentage, 
     $eligible, $start_date, $end_date, $terms
 ) {
     $connection = $this->getConnection();
 
-    $stmt = $connection->prepare( "INSERT INTO discount_promotion ( admin_id, name, type_of_discount, downpayment_percentage, interest_percentage, eligible, start_date, end_date, terms ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" );
+    $stmt = $connection->prepare( "INSERT INTO discount_promotion ( admin_id, name, type_of_discount, payment_type, cash_discount_percentage, downpayment_percentage, interest_percentage, eligible, start_date, end_date, terms ) VALUES (?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?)" );
 
     $result = $stmt->execute([
-        $admin_id, $name, $type_of_discount, $downpayment_percentage, 
+        $admin_id, $name, $type_of_discount,$payment_type, $cash_discount_percentage, $downpayment_percentage, 
         $interest_percentage, $eligible, $start_date, 
         $end_date, $terms
     ]);
@@ -862,14 +862,14 @@ public function selectDiscount_WHEREid($discount){
 
 
 //-----------------------------------------------------------------------------------------------UPDATE DISCOUNTS AND PROMOTIONS
-public function updateDiscountPromotion( $discount_id, $name, $type_of_discount, $downpayment_percentage, $interest_percentage, $eligible, $start_date, $end_date, $terms ) {
+public function updateDiscountPromotion( $discount_id, $name, $type_of_discount, $payment_type, $cash_discount_percentage, $downpayment_percentage, $interest_percentage, $eligible, $start_date, $end_date, $terms ) {
     $connection = $this->getConnection();
 
     // Prepare the update statement
-    $stmt = $connection->prepare("UPDATE discount_promotion SET name = ?, type_of_discount = ?, downpayment_percentage = ?, interest_percentage = ?, eligible = ?, start_date = ?, end_date = ?, terms = ? WHERE id = ?");
+    $stmt = $connection->prepare("UPDATE discount_promotion SET name = ?, type_of_discount = ?, downpayment_percentage = ?, interest_percentage = ?, eligible = ?, start_date = ?, end_date = ?, terms = ?, payment_type = ?, cash_discount_percentage = ? WHERE id = ?");
 
     // Execute the statement with the provided parameters
-    $result = $stmt->execute([$name, $type_of_discount, $downpayment_percentage, $interest_percentage, $eligible, $start_date, $end_date, $terms, $discount_id ]);
+    $result = $stmt->execute([$name, $type_of_discount, $downpayment_percentage, $interest_percentage, $eligible, $start_date, $end_date, $terms, $payment_type, $cash_discount_percentage, $discount_id ]);
 
     return $result;
 }

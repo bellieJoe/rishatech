@@ -8,7 +8,7 @@ $(document).ready(function() {
     "order": [[0, "asc"]]  // Sort by the first column (index 0) in descending order
   });
 
-  $('#dataTables_Brands').DataTable({
+  $('#dataTables_Brand').DataTable({
     "order": [[0, "desc"]]  // Sort by the first column (index 0) in descending order
   });
 

@@ -9,6 +9,7 @@ require_once 'templates/admin_header.php';
 
 <!-- Custom styles for this page -->
 <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script src="vendor/jquery/jquery.min.js"></script>
 
 <body id="page-top">
 
@@ -46,7 +47,7 @@ require_once 'templates/admin_header.php';
 
                     <!-- Modal -->
                     <div class="modal fade" id="AddDiscountPromotion" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                        <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Add Discounts & Promotions</h5>
@@ -77,28 +78,48 @@ require_once 'templates/admin_header.php';
                                         </div>
 
                                         <div class="form-group">
-                                          <label for="downpayment_percentage">Downpayment Percentage</label>
-                                          <input type="number" name="downpayment_percentage" id="downpayment_percentage" class="form-control" placeholder="Enter Downpayment Percentage">
+                                            <label for="payment_type">Payment Type</label>
+                                            <select class="form-control" name="payment_type" id="payment_type" required>
+                                                <option disabled>----------SELECT PAYMENT TYPE---------</option>
+                                                <option value="Cash">Cash</option>
+                                                <option value="Credit">Credit</option>
+                                                <option value="Both">Both</option>
+                                            </select>
                                         </div>
 
-                                        <div class="form-group">
-                                          <label for="interest_percentage">Interest Percentage</label>
-                                          <input type="number" name="interest_percentage" id="interest_percentage" class="form-control" placeholder="Enter Interest Percentage">
+                                        <div class="row">
+                                            <div class="col-md mb-3">
+                                              <label for="cash_discount_percentage">Cash Discount Percentage</label>
+                                              <input type="number" name="cash_discount_percentage" id="cash_discount_percentage" class="form-control" placeholder="Enter Cash Discount Percentage">
+                                            </div>
+    
+                                            <div class="col-md mb-3">
+                                              <label for="downpayment_percentage">Downpayment Percentage</label>
+                                              <input type="number" name="downpayment_percentage" id="downpayment_percentage" class="form-control" placeholder="Enter Downpayment Percentage">
+                                            </div>
+    
+                                            <div class="col-md mb-3">
+                                              <label for="interest_percentage">Interest Percentage</label>
+                                              <input type="number" name="interest_percentage" id="interest_percentage" class="form-control" placeholder="Enter Interest Percentage">
+                                            </div>
                                         </div>
+
 
                                         <div class="form-group">
                                           <label for="eligible">Eligible For</label>
                                           <input type="text" name="eligible" id="eligible" class="form-control" placeholder="e.g: All Customers">
                                         </div>
 
-                                        <div class="form-group">
-                                          <label for="start_date">Start Date</label>
-                                          <input type="date" name="start_date" id="start_date" class="form-control" placeholder="Enter Start Date">
-                                        </div>
-
-                                        <div class="form-group">
-                                          <label for="end_date">End Date</label>
-                                          <input type="date" name="end_date" id="end_date" class="form-control" placeholder="Enter End Date">
+                                        <div class="row">
+                                            <div class="col-sm mb-3">
+                                              <label for="start_date">Start Date</label>
+                                              <input type="date" name="start_date" id="start_date" class="form-control" placeholder="Enter Start Date">
+                                            </div>
+    
+                                            <div class="col-sm mb-3">
+                                              <label for="end_date">End Date</label>
+                                              <input type="date" name="end_date" id="end_date" class="form-control" placeholder="Enter End Date">
+                                            </div>
                                         </div>
 
                                         <div class="form-group">
@@ -131,6 +152,8 @@ require_once 'templates/admin_header.php';
                                         <tr>
                                             <th>Discount/Promotion Name</th>
                                             <th>Type</th>
+                                            <th>Payment Type</th>
+                                            <th>Cash Discount Percentage</th>
                                             <th>Downpayment Discount Percentage</th>
                                             <th>Interest Discount Percentage</th>
                                             <th>Eligible For</th>
@@ -159,23 +182,29 @@ require_once 'templates/admin_header.php';
                                             <tr>
                                                 <td><?=$key['name']?></td>
                                                 <td><?=$key['type_of_discount']?></td>
-                                                <td><?php echo htmlspecialchars($key['downpayment_percentage'] * 100) . '%'; ?></td>
-                                                <td><?php echo htmlspecialchars($key['interest_percentage'] * 100) . '%'; ?></td>
+                                                <td><?=$key['payment_type'] == 'Both' ? 'Cash & Credit' : $key['payment_type']?></td>
+                                                <td><?php echo $key['cash_discount_percentage'] ? htmlspecialchars($key['cash_discount_percentage'] * 100) . '%' : 'N/A'; ?></td>
+                                                <td><?php echo $key['downpayment_percentage'] ? htmlspecialchars($key['downpayment_percentage'] * 100) . '%' : 'N/A'; ?></td>
+                                                <td><?php echo $key['interest_percentage'] ? htmlspecialchars($key['interest_percentage'] * 100) . '%' : 'N/A'; ?></td>
                                                 <td><?=$key['eligible']?></td>
                                                 <td><?php echo (new DateTime($key['start_date']))->format('M d, Y'); ?></td>
                                                 <td><?php echo (new DateTime($key['end_date']))->format('M d, Y'); ?></td>
                                                 <td><?=$key['terms']?></td>
                                                 <td><?=$status?></td> <!-- Display the determined status -->
                                                 <td>
-                                                    <!-- Edit Button -->
-                                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#EditDiscount_<?=$key['id']?>">Edit</button>
-
-                                                    <!-- Delete Button -->
-                                                    <button class="btn btn-danger" data-toggle="modal" data-target="#DeleteDiscount_<?=$key['id']?>">Delete</button>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            Actions
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#EditDiscount_<?=$key['id']?>"><i class="fas fa-edit"></i> Edit</a>
+                                                            <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#DeleteDiscount_<?=$key['id']?>"><i class="fas fa-trash-alt"></i> Delete</a>
+                                                        </div>
+                                                    </div>
 
                                                     <!-- Edit Modal -->
                                                     <div class="modal fade" id="EditDiscount_<?=$key['id']?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
+                                                        <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <h5 class="modal-title">Edit Discounts & Promotions</h5>
@@ -200,24 +229,41 @@ require_once 'templates/admin_header.php';
                                                                             </select>
                                                                         </div>
                                                                         <div class="form-group">
-                                                                            <label for="downpayment_percentage">Downpayment Percentage</label>
-                                                                            <input type="number" name="downpayment_percentage" id="downpayment_percentage" class="form-control" value="<?=$key['downpayment_percentage'] * 100?>" placeholder="Enter Downpayment Percentage">
+                                                                            <label for="payment_type">Payment Type</label>
+                                                                            <select class="form-control" name="payment_type" id="payment_type" required>
+                                                                                <option disabled>----------SELECT TYPE---------</option>
+                                                                                <option value="Cash" <?= $key['payment_type'] === 'Cash' ? 'selected' : '' ?>>Cash</option>
+                                                                                <option value="Credit" <?= $key['payment_type'] === 'Credit' ? 'selected' : '' ?>>Credit</option>
+                                                                                <option value="Both" <?= $key['payment_type'] === 'Both' ? 'selected' : '' ?>>Both</option>
+                                                                            </select>
                                                                         </div>
-                                                                        <div class="form-group">
-                                                                            <label for="interest_percentage">Interest Percentage</label>
-                                                                            <input type="number" name="interest_percentage" id="interest_percentage" class="form-control" value="<?=$key['interest_percentage'] * 100?>" placeholder="Enter Interest Percentage">
+                                                                        <div class="row">
+                                                                            <div class="col-md mb-3">
+                                                                                <label for="cash_discount_percentage">Cash Discount Percentage</label>
+                                                                                <input type="number" name="cash_discount_percentage" id="cash_discount_percentage" class="form-control" value="<?=$key['cash_discount_percentage'] * 100?>" placeholder="Enter Downpayment Percentage">
+                                                                            </div>
+                                                                            <div class="col-md mb-3">
+                                                                                <label for="downpayment_percentage">Downpayment Percentage</label>
+                                                                                <input type="number" name="downpayment_percentage" id="downpayment_percentage" class="form-control" value="<?=$key['downpayment_percentage'] * 100?>" placeholder="Enter Downpayment Percentage">
+                                                                            </div>
+                                                                            <div class="col-md mb-3">
+                                                                                <label for="interest_percentage">Interest Percentage</label>
+                                                                                <input type="number" name="interest_percentage" id="interest_percentage" class="form-control" value="<?=$key['interest_percentage'] * 100?>" placeholder="Enter Interest Percentage">
+                                                                            </div>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="eligible">Eligible For</label>
                                                                             <input type="text" name="eligible" id="eligible" class="form-control" value="<?=$key['eligible']?>" placeholder="e.g: All Customers">
                                                                         </div>
-                                                                        <div class="form-group">
-                                                                            <label for="start_date">Start Date</label>
-                                                                            <input type="date" name="start_date" id="start_date" class="form-control" value="<?=$key['start_date']?>">
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="end_date">End Date</label>
-                                                                            <input type="date" name="end_date" id="end_date" class="form-control" value="<?=$key['end_date']?>">
+                                                                        <div class="row">
+                                                                            <div class="col-sm mb-3">
+                                                                                <label for="start_date">Start Date</label>
+                                                                                <input type="date" name="start_date" id="start_date" class="form-control" value="<?=$key['start_date']?>">
+                                                                            </div>
+                                                                            <div class="col-sm mb-3">
+                                                                                <label for="end_date">End Date</label>
+                                                                                <input type="date" name="end_date" id="end_date" class="form-control" value="<?=$key['end_date']?>">
+                                                                            </div>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="terms">Terms</label>
@@ -232,6 +278,31 @@ require_once 'templates/admin_header.php';
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <script>
+                                                        $(document).on("change", "#payment_type", function () {
+                                                            const $modal = $(this).closest(".modal");
+                                                            const paymentType = $(this).val();
+
+                                                            // Control visibility of fields
+                                                            if (paymentType === "Cash") {
+                                                                $modal.find("#cash_discount_percentage").closest("div.col-md").show();
+                                                                $modal.find("#downpayment_percentage, #interest_percentage").closest("div.col-md").hide();
+                                                            } else if (paymentType === "Credit") {
+                                                                $modal.find("#cash_discount_percentage").closest("div.col-md").hide();
+                                                                $modal.find("#downpayment_percentage, #interest_percentage").closest("div.col-md").show();
+                                                            } else if (paymentType === "Both") {
+                                                                $modal.find("#cash_discount_percentage, #downpayment_percentage, #interest_percentage").closest("div.col-md").show();
+                                                            } else {
+                                                                $modal.find("#cash_discount_percentage, #downpayment_percentage, #interest_percentage").closest("div.col-md").hide();
+                                                            }
+                                                        });
+
+                                                        // Trigger change event on modal show
+                                                        $(document).on("show.bs.modal", ".modal", function () {
+                                                            $(this).find("#payment_type").trigger("change");
+                                                        });
+                                                    </script>
 
                                                     <!-- Delete Modal -->
                                                     <div class="modal fade" id="DeleteDiscount_<?=$key['id']?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -297,29 +368,11 @@ require_once 'templates/admin_header.php';
     </a>
 
 
-    <script>
-        // Get references to the payment type select element and the months to pay container
-        var paymentTypeSelect = document.getElementById('payment_type');
-        var monthsToPayContainer = document.getElementById('months_to_pay_container');
-        var monthsToPaySelect = document.getElementById('months_to_pay');
-
-        // Add event listener to the payment type select
-        paymentTypeSelect.addEventListener('change', function() {
-            if (this.value === 'Credit') {
-                // Show the Months To Pay dropdown if Credit is selected
-                monthsToPayContainer.style.display = 'block';
-                monthsToPaySelect.setAttribute('required', 'required'); // Make it required
-            } else {
-                // Hide the Months To Pay dropdown if Cash is selected
-                monthsToPayContainer.style.display = 'none';
-                monthsToPaySelect.removeAttribute('required'); // Remove the required attribute
-            }
-        });
-    </script>
+    
 
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
+    
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
@@ -351,6 +404,53 @@ require_once 'templates/admin_header.php';
     unset($_SESSION['status']);
     }
     ?>
+
+<script>
+        // Get references to the payment type select element and the months to pay container
+        var paymentTypeSelect = document.getElementById('payment_type');
+        var monthsToPayContainer = document.getElementById('months_to_pay_container');
+        var monthsToPaySelect = document.getElementById('months_to_pay');
+
+        // Add event listener to the payment type select
+        paymentTypeSelect.addEventListener('change', function() {
+            if (this.value === 'Credit') {
+                // Show the Months To Pay dropdown if Credit is selected
+                monthsToPayContainer.style.display = 'block';
+                monthsToPaySelect.setAttribute('required', 'required'); // Make it required
+            } else {
+                // Hide the Months To Pay dropdown if Cash is selected
+                monthsToPayContainer.style.display = 'none';
+                monthsToPaySelect.removeAttribute('required'); // Remove the required attribute
+            }
+        });
+
+        $(document).ready(function() {
+            $AddDiscountPromotion = $('#AddDiscountPromotion');
+            $AddDiscountPromotion.find("#payment_type").on("change", function(e) {
+                console.log(e);
+                if (e.target.value === 'Cash') {
+                    $AddDiscountPromotion.find("#cash_discount_percentage").closest("div.col-md").show();
+                    $AddDiscountPromotion.find("#downpayment_percentage").closest("div.col-md").hide();
+                    $AddDiscountPromotion.find("#interest_percentage").closest("div.col-md").hide();
+                } 
+                else if (e.target.value === 'Credit') {
+                    $AddDiscountPromotion.find("#cash_discount_percentage").closest("div.col-md").hide();
+                    $AddDiscountPromotion.find("#downpayment_percentage").closest("div.col-md").show();
+                    $AddDiscountPromotion.find("#interest_percentage").closest("div.col-md").show();
+                } else if(e.target.value === 'Both') {
+                    $AddDiscountPromotion.find("#cash_discount_percentage").closest("div.col-md").show();
+                    $AddDiscountPromotion.find("#downpayment_percentage").closest("div.col-md").show();
+                    $AddDiscountPromotion.find("#interest_percentage").closest("div.col-md").show();
+                } else {
+                    $AddDiscountPromotion.find("#cash_discount_percentage").closest("div.col-md").hide();
+                    $AddDiscountPromotion.find("#downpayment_percentage").closest("div.col-md").hide();
+                    $AddDiscountPromotion.find("#interest_percentage").closest("div.col-md").hide();
+                }
+            });
+
+            $AddDiscountPromotion.find("#payment_type").trigger("change");
+        });
+    </script>
 
 </body>
 

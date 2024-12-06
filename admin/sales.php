@@ -44,7 +44,7 @@ require_once 'templates/admin_header.php';
                       New Customer Sales
                     </button>
 
-                    <!-- Modal -->
+                    <!-- ADD SALES MODAL -->
                     <div class="modal fade" id="AddCustomer" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -98,7 +98,7 @@ require_once 'templates/admin_header.php';
                                           <label for="qty">Units</label>
                                           <input type="number" name="qty" id="qty" class="form-control" placeholder="Enter Units">
                                         </div>
-<div class="form-group">
+                                        <div class="form-group">
                                             <label for="payment_type">Payment Type</label>
                                             <select class="form-control" name="payment_type" id="payment_type" required>
                                                 <option disabled selected>----------SELECT PAYMENT TYPE---------</option>
@@ -130,7 +130,7 @@ require_once 'templates/admin_header.php';
                                             </select>
                                         </div>
 
-  <div class="form-group" id="months_to_pay_container" style="display: none;">
+                                        <div class="form-group" id="months_to_pay_container" style="display: none;">
                                             <label for="months_to_pay">Installment Plan</label>
                                             <select class="form-control" name="months_to_pay" id="months_to_pay">
                                                 <option disabled selected>----------SELECT MONTHS TO PAY---------</option>
@@ -157,10 +157,6 @@ require_once 'templates/admin_header.php';
                                             <label for="transaction_number">Transaction Number</label>
                                             <input type="number" name="transaction_number" id="transaction_number" class="form-control" placeholder="Enter Transaction Number">
                                         </div>
-
-                                        
-
-                                      
 
                                     </div>
                                     <div class="modal-footer">
