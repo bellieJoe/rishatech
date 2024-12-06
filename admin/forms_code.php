@@ -1044,6 +1044,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
                 $price_plus_interest = $total_price;
                 $total_sales = $price_plus_interest; // Total sales without interest
                 $monthly_payment = $price_plus_interest; // Single payment for cash
+
+                if(!in_array($discount, ["No Interest", "No Downpayment", "No Discount", "", null])) {
+                    $selectDiscount_WHEREid = $db->selectDiscount_WHEREid($discount);
+                    $discount_percentage = $selectDiscount_WHEREid['cash_discount_percentage'];
+                    $_price = $total_price - ($discount_percentage * $total_price);
+                    $price_plus_interest = $_price;
+                    $total_sales = $price_plus_interest; // Total sales without interest
+                    $monthly_payment = $price_plus_interest; // Single payment for cash
+                }
             } else if ($payment_type == 'Credit') {
                 $status = 'Active';
 

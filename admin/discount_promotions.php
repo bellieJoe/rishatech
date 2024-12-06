@@ -95,12 +95,12 @@ require_once 'templates/admin_header.php';
     
                                             <div class="col-md mb-3">
                                               <label for="downpayment_percentage">Downpayment Percentage</label>
-                                              <input type="number" name="downpayment_percentage" id="downpayment_percentage" class="form-control" placeholder="Enter Downpayment Percentage">
+                                              <input type="number" name="downpayment_percentage" id="downpayment_percentage" class="form-control" max="24" placeholder="Enter Downpayment Percentage">
                                             </div>
     
                                             <div class="col-md mb-3">
                                               <label for="interest_percentage">Interest Percentage</label>
-                                              <input type="number" name="interest_percentage" id="interest_percentage" class="form-control" placeholder="Enter Interest Percentage">
+                                              <input type="number" name="interest_percentage" id="interest_percentage" max="3" class="form-control" placeholder="Enter Interest Percentage">
                                             </div>
                                         </div>
 
@@ -183,9 +183,9 @@ require_once 'templates/admin_header.php';
                                                 <td><?=$key['name']?></td>
                                                 <td><?=$key['type_of_discount']?></td>
                                                 <td><?=$key['payment_type'] == 'Both' ? 'Cash & Credit' : $key['payment_type']?></td>
-                                                <td><?php echo $key['cash_discount_percentage'] ? htmlspecialchars($key['cash_discount_percentage'] * 100) . '%' : 'N/A'; ?></td>
-                                                <td><?php echo $key['downpayment_percentage'] ? htmlspecialchars($key['downpayment_percentage'] * 100) . '%' : 'N/A'; ?></td>
-                                                <td><?php echo $key['interest_percentage'] ? htmlspecialchars($key['interest_percentage'] * 100) . '%' : 'N/A'; ?></td>
+                                                <td><?php echo $key['cash_discount_percentage'] != null ? htmlspecialchars($key['cash_discount_percentage'] * 100) . '%' : 'N/A'; ?></td>
+                                                <td><?php echo $key['downpayment_percentage'] != null ? htmlspecialchars($key['downpayment_percentage'] * 100) . '%' : 'N/A'; ?></td>
+                                                <td><?php echo $key['interest_percentage'] != null ? htmlspecialchars($key['interest_percentage'] * 100) . '%' : 'N/A'; ?></td>
                                                 <td><?=$key['eligible']?></td>
                                                 <td><?php echo (new DateTime($key['start_date']))->format('M d, Y'); ?></td>
                                                 <td><?php echo (new DateTime($key['end_date']))->format('M d, Y'); ?></td>
@@ -244,11 +244,11 @@ require_once 'templates/admin_header.php';
                                                                             </div>
                                                                             <div class="col-md mb-3">
                                                                                 <label for="downpayment_percentage">Downpayment Percentage</label>
-                                                                                <input type="number" name="downpayment_percentage" id="downpayment_percentage" class="form-control" value="<?=$key['downpayment_percentage'] * 100?>" placeholder="Enter Downpayment Percentage">
+                                                                                <input type="number" name="downpayment_percentage" id="downpayment_percentage" class="form-control" value="<?=$key['downpayment_percentage'] * 100?>" max="25" placeholder="Enter Downpayment Percentage">
                                                                             </div>
                                                                             <div class="col-md mb-3">
                                                                                 <label for="interest_percentage">Interest Percentage</label>
-                                                                                <input type="number" name="interest_percentage" id="interest_percentage" class="form-control" value="<?=$key['interest_percentage'] * 100?>" placeholder="Enter Interest Percentage">
+                                                                                <input type="number" name="interest_percentage" id="interest_percentage" class="form-control" value="<?=$key['interest_percentage'] * 100?>" max="3" placeholder="Enter Interest Percentage">
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group">

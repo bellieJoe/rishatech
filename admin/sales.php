@@ -46,13 +46,13 @@ require_once 'templates/admin_header.php';
 
                     <!-- ADD SALES MODAL -->
                     <div class="modal fade" id="AddCustomer" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                        <div class="modal-dialog modal-xl" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Add Items New Customer Sales</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 <form action="forms_code.php" method="post">
                                     <!-- Include CSRF token as a hidden input field -->
@@ -61,101 +61,122 @@ require_once 'templates/admin_header.php';
                                     <input type="hidden" name="admin_id" value="<?php echo $_SESSION['auth_user']['admin_id']; ?>">
 
                                     <div class="modal-body" style="overflow-y: auto; height: 400px;">
-
-                                        <div class="form-group">
-                                            <label for="customer">Customer</label>
-                                            <select class="form-control" name="customer" id="customer" required>
-                                                <option disabled selected>----------SELECT CUSTOMER---------</option>
-                                                <?php
-                                                $selectAllCustomers = $db->selectAllCustomers();
-
-                                                foreach ($selectAllCustomers as $key) {
-                                                ?>
-                                                <option value="<?=$key['id']?>"><?=$key['full_name']?></option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="appliances">Appliances And Amount</label>
-                                            <select class="form-control" name="appliances" id="appliances" required>
-                                                <option disabled selected>----------SELECT APPLIANCES---------</option>
-                                                <?php
-                                                $selectAllappliances = $db->selectAllappliances();
-
-                                                foreach ($selectAllappliances as $key) {
-                                                ?>
-                                                <option value="<?=$key['AppliancesID']?>"><?=$key['appliances_name']?> - ₱<?= number_format($key['price'], 2) ?></option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                          <label for="qty">Units</label>
-                                          <input type="number" name="qty" id="qty" class="form-control" placeholder="Enter Units">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="payment_type">Payment Type</label>
-                                            <select class="form-control" name="payment_type" id="payment_type" required>
-                                                <option disabled selected>----------SELECT PAYMENT TYPE---------</option>
-                                               <option value="Cash">CASH</option>
-											   <option value="Credit">CREDIT</option>
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <div class="form-group">
+                                                    <label for="customer">Customer</label>
+                                                    <select class="form-control" name="customer" id="customer" required>
+                                                        <option disabled selected>----------SELECT CUSTOMER---------</option>
+                                                        <?php
+                                                        $selectAllCustomers = $db->selectAllCustomers();
+        
+                                                        foreach ($selectAllCustomers as $key) {
+                                                        ?>
+                                                        <option value="<?=$key['id']?>"><?=$key['full_name']?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+        
+                                                <div class="form-group">
+                                                    <label for="appliances">Appliances And Amount</label>
+                                                    <select class="form-control" name="appliances" id="appliances" required>
+                                                        <option disabled selected>----------SELECT APPLIANCES---------</option>
+                                                        <?php
+                                                        $selectAllappliances = $db->selectAllappliances();
+        
+                                                        foreach ($selectAllappliances as $key) {
+                                                        ?>
+                                                        <option data-price="<?=$key['price']?>" value="<?=$key['AppliancesID']?>"><?=$key['appliances_name']?> - ₱<?= number_format($key['price'], 2) ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+        
+                                                <div class="form-group">
+                                                  <label for="qty">Units</label>
+                                                  <input type="number" name="qty" id="qty" class="form-control" placeholder="Enter Units">
+                                                </div>
+        
+                                                <div class="form-group">
+                                                    <label for="payment_type">Payment Type</label>
+                                                    <select class="form-control" name="payment_type" id="payment_type" required>
+                                                        <option disabled selected>----------SELECT PAYMENT TYPE---------</option>
+                                                       <option value="Cash">CASH</option>
+                                                       <option value="Credit">CREDIT</option>
+                                                    </select>
+                                                </div>
                                                 
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="discount">Promotion or Discount Applied</label>
-                                            <select class="form-control" name="discount" id="discount" required>
-                                                <option disabled>----------SELECT DISCOUNT---------</option>
-                                                <option value="No Discount" selected>No Promotion or Discount Applied</option>
-                                                <option value="No Downpayment">No Downpayment</option>
-                                                <option value="No Interest">No Interest</option>
-                                                <?php
-                                                // Fetch all discounts and promotions
-                                                $selectAllDiscountsPromotions = $db->selectAllDiscountsPromotions();
-                                                $currentDate = date('Y-m-d'); // Get today's date
-
-                                                foreach ($selectAllDiscountsPromotions as $discount) {
-                                                    // Check if the discount is active based on the current date
-                                                    if ($currentDate >= $discount['start_date'] && $currentDate <= $discount['end_date']) {
-                                                        // Only show the discount if it is active
-                                                        echo '<option value="' . $discount['id'] . '">' . $discount['name'] . '</option>';
-                                                    }
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group" id="months_to_pay_container" style="display: none;">
-                                            <label for="months_to_pay">Installment Plan</label>
-                                            <select class="form-control" name="months_to_pay" id="months_to_pay">
-                                                <option disabled selected>----------SELECT MONTHS TO PAY---------</option>
-                                                <option value="3">3 Months</option>
-                                                <option value="6">6 Months</option>
-                                                <option value="9">9 Months</option>
-                                                <option value="12">12 Months</option>
-												<option value="18">18 Months</option>
-												<option value="24">24 Months</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="payment_method">Payment Method</label>
-                                            <select class="form-control" name="payment_method" id="payment_method" required>
-                                                <option disabled selected>----------SELECT PAYMENT METHOD---------</option>
-                                                <option value="CASH">CASH</option>
-                                                <option value="GCASH">GCASH</option>
-                                               
-                                            </select>
-                                        </div>
-
-                                        <!-- Transaction Number Field (Initially Hidden) -->
-                                        <div class="form-group" id="transaction_number_group" style="display: none;">
-                                            <label for="transaction_number">Transaction Number</label>
-                                            <input type="number" name="transaction_number" id="transaction_number" class="form-control" placeholder="Enter Transaction Number">
+                                                <div class="form-group">
+                                                    <label for="discount">Promotion or Discount Applied</label>
+                                                    <select class="form-control" name="discount" id="discount" required>
+                                                    </select>
+                                                </div>
+        
+                                                <div class="form-group" id="months_to_pay_container" style="display: none;">
+                                                    <label for="months_to_pay">Installment Plan</label>
+                                                    <select class="form-control" name="months_to_pay" id="months_to_pay">
+                                                        <option disabled selected>----------SELECT MONTHS TO PAY---------</option>
+                                                        <option value="3">3 Months</option>
+                                                        <option value="6">6 Months</option>
+                                                        <option value="9">9 Months</option>
+                                                        <option value="12">12 Months</option>
+                                                        <option value="18">18 Months</option>
+                                                        <option value="24">24 Months</option>
+                                                    </select>
+                                                </div>
+        
+                                                <div class="form-group">
+                                                    <label for="payment_method">Payment Method</label>
+                                                    <select class="form-control" name="payment_method" id="payment_method" required>
+                                                        <option disabled selected>----------SELECT PAYMENT METHOD---------</option>
+                                                        <option value="CASH">CASH</option>
+                                                        <option value="GCASH">GCASH</option>
+                                                       
+                                                    </select>
+                                                </div>
+        
+                                                <!-- Transaction Number Field (Initially Hidden) -->
+                                                <div class="form-group" id="transaction_number_group" style="display: none;">
+                                                    <label for="transaction_number">Transaction Number</label>
+                                                    <input type="number" name="transaction_number" id="transaction_number" class="form-control" placeholder="Enter Transaction Number">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <div id="payment_breakdown">
+                                                    <table class="table border">
+                                                        <thead class="thead-dark bg-primary text-white">
+                                                            <tr>
+                                                                <td class="text-center">Payments Breakdown</td>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                    <table class="table table-bordered table-sm" >
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="w-50"><strong>Total Price</strong></td>
+                                                                <td class="w-50" id="total_price">N/A</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="w-50"><strong>Downpayment</strong></td>
+                                                                <td class="w-50" id="downpayment">N/A</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <table class="table border table-striped" id="monthly_ammortization_table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Amount</th>
+                                                                <th>Penalty</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -317,77 +338,264 @@ require_once 'templates/admin_header.php';
         <i class="fas fa-angle-up"></i>
     </a>
 
-
-    <script>
-        // Get references to the payment type select element and the months to pay container
-        var paymentTypeSelect = document.getElementById('payment_type');
-        var monthsToPayContainer = document.getElementById('months_to_pay_container');
-        var monthsToPaySelect = document.getElementById('months_to_pay');
-
-        // Add event listener to the payment type select
-        paymentTypeSelect.addEventListener('change', function() {
-            if (this.value === 'Credit') {
-                // Show the Months To Pay dropdown if Credit is selected
-                monthsToPayContainer.style.display = 'block';
-                monthsToPaySelect.setAttribute('required', 'required'); // Make it required
-            } else {
-                // Hide the Months To Pay dropdown if Cash is selected
-                monthsToPayContainer.style.display = 'none';
-                monthsToPaySelect.removeAttribute('required'); // Remove the required attribute
-            }
-        });
-    </script>
+</body>
 
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+<!-- Page level plugins -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-    <script>
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>
+
+<script>
     $(document).ready(function() {
-        // Show or hide the transaction number field based on payment method selection
-        $('#payment_method').change(function() {
-            var paymentMethod = $(this).val();
-            if (paymentMethod !== 'CASH') {
-                $('#transaction_number_group').show();  // Show if payment method is not 'CASH'
-            } else {
-                $('#transaction_number_group').hide();  // Hide if payment method is 'CASH'
-            }
+        // Cache jQuery selectors
+        const $AddCustomer = $('#AddCustomer');
+        const $PaymentType = $AddCustomer.find('#payment_type');
+        const $Qty = $AddCustomer.find('#qty');
+        const $Appliances = $AddCustomer.find('#appliances');
+        const $MonthsToPay = $AddCustomer.find('#months_to_pay');
+        const $TotalPrice = $AddCustomer.find('#total_price');
+        const $DownPayment = $AddCustomer.find('#downpayment');
+        const $MonthsToPayContainer = $('#months_to_pay_container');
+        const $MonthlyAmmortizationTable = $('#monthly_ammortization_table');
+        const $Discount = $('#discount');
+        const discounts = <?=json_encode($db->selectAllDiscountsPromotions())?>.filter(discount => new Date(discount.start_date) <= new Date() && new Date(discount.end_date) >= new Date());
+
+
+        // Event listeners
+        $PaymentType.on('change', function() {
+            toggleMonthsToPayVisibility();
+            renderPaymentBreakdown();
+            filterDiscounts();
         });
+
+        $MonthsToPay.on('change', function() {
+            renderPaymentBreakdown();
+        });
+
+        $Appliances.on('change', function() {
+            renderPaymentBreakdown();
+        });
+
+        $Qty.on('input', function() {
+            renderPaymentBreakdown();
+        });
+
+        $Discount.on('change', function() {
+            renderPaymentBreakdown();
+        })
+
+        function filterDiscounts() {
+            // Empty the Discount dropdown
+            $Discount.empty();
+            
+            const paymentType = $PaymentType.val();
+            
+            // Add a default disabled option
+            $Discount.append(`<option disabled>----------SELECT DISCOUNT/PROMOTION----------</option>`);
+            
+            // Handle Cash Payment type
+            if (paymentType === 'Cash') {
+                discounts.filter(discount => ['Cash', 'Both'].includes(discount.payment_type)).forEach(discount => {
+                    $Discount.append(`<option value="${discount.id}">${discount.name}</option>`);
+                });
+            } 
+            
+            // Handle Credit Payment type
+            else if (paymentType === 'Credit') {
+                // Add hardcoded credit-specific options
+                const creditOptions = [
+                    { value: "No Downpayment", text: "No Downpayment" },
+                    { value: "No Interest", text: "No Interest" },
+                    { value: "No Discount", text: "No Promotion or Discount Applied" }
+                ];
+                
+                // Append hardcoded options
+                creditOptions.forEach(option => {
+                    $Discount.append(`<option value="${option.value}">${option.text}</option>`);
+                });
+                
+                // Append discounts for credit or both payment types
+                discounts.filter(discount => ['Credit', 'Both'].includes(discount.payment_type)).forEach(discount => {
+                    $Discount.append(`<option value="${discount.id}">${discount.name}</option>`);
+                });
+
+                $Discount.val('');
+            }
+        }
+
+
+        // Toggle visibility of months_to_pay input
+        function toggleMonthsToPayVisibility() {
+            if ($PaymentType.val() === 'Credit') {
+                $MonthsToPayContainer.show();
+                $MonthsToPay.prop('required', true); // Make it required
+            } else {
+                $MonthsToPayContainer.hide();
+                $MonthsToPay.prop('required', false); // Remove required
+            }
+        }
+
+        // Calculate the total price
+        function calculateTotalPrice() {
+            const selectedAppliance = $Appliances.find(':selected');
+            const price = ($Qty.val() * selectedAppliance.data('price'));
+            var cash_discount_percentage = 0;
+
+            if($PaymentType.val() === 'Cash' && $Discount.val() ) {
+                cash_discount_percentage = discounts.find(discount => discount.id === $Discount.val()).cash_discount_percentage;
+            }
+
+            if($PaymentType.val() === 'Credit' ) {
+                var interest = 0.03;
+
+                if($Discount.val() === 'No Discount') {
+                    return price + ((price - calculateDownPayment()) * interest);
+                }
+                if($Discount.val() === 'No Interest') {
+                    interest = 0;
+                    return price + ((price - calculateDownPayment()) * interest);
+                }
+                else if(!["No Downpayment", "", null].includes($Discount.val())) {
+                    var discount = discounts.find(discount => discount.id === $Discount.val());  
+                    interest = discount.interest_percentage;
+                    return price + ((price - calculateDownPayment()) * interest);
+                }
+                return price + ((price - calculateDownPayment()) * interest);
+            }
+
+            return price - (price * cash_discount_percentage);
+        }
+
+        // Calculate downpayment (25% of total price)
+        function calculateDownPayment() {
+            const selectedAppliance = $Appliances.find(':selected');
+            const price = ($Qty.val() * selectedAppliance.data('price'));
+            var downpayment = Math.round(price * 0.25);
+            if ($Discount.val() == 'No Downpayment') {
+                // No downpayment, apply 3% interest
+                return 0;
+            } 
+            else if(!["No Discount", "No Interest", "", null].includes($Discount.val())) {
+              var discount = discounts.find(discount => discount.id === $Discount.val());  
+              downpayment = Math.round(price * discount.downpayment_percentage);
+            }
+            return downpayment;
+        }
+
+        // Render the payment breakdown
+        function renderPaymentBreakdown() {
+            const totalPrice = calculateTotalPrice();
+            $TotalPrice.text(`PHP ${totalPrice.toFixed(2)}`);
+
+            if ($PaymentType.val() === 'Credit') {
+                renderCreditBreakdown();
+            } else {
+                renderCashBreakdown();
+            }
+        }
+
+        // Render breakdown for Credit payment type
+        function renderCreditBreakdown() {
+            const downPayment = calculateDownPayment();
+            $DownPayment.text(`PHP ${downPayment.toFixed(2)}`);
+            $MonthlyAmmortizationTable.show();
+            renderMonthlyAmmortization();
+        }
+
+        // Render breakdown for Cash payment type
+        function renderCashBreakdown() {
+            $DownPayment.text('N/A');
+            $MonthlyAmmortizationTable.hide();
+        }
+
+        function renderMonthlyAmmortization() {
+            const monthsToPay = parseInt($MonthsToPay.val());
+            const totalPrice = calculateTotalPrice();
+            const downPayment = calculateDownPayment();
+            const monthlyPayment = (totalPrice - downPayment) / monthsToPay;
+            let today = new Date();
+
+            // Helper function to get the next month's date
+            function getNextMonth(date) {
+                const nextMonth = new Date(date);
+                nextMonth.setMonth(date.getMonth() + 1);
+                return nextMonth;
+            }
+
+            // Helper function to format date as "Month Year"
+            function formatDate(date) {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return date.toLocaleDateString('en-US', options);
+            }
+
+            // Empty the table body first
+            $MonthlyAmmortizationTable.find('tbody').empty();
+
+            // Generate rows for the selected number of months
+            for (let i = 0; i < monthsToPay; i++) {
+                const dueDate = getNextMonth(today);
+                today = new Date(dueDate);  // Update today to the new due date for the next iteration
+
+                // Add a new row for the monthly amortization
+                $MonthlyAmmortizationTable.find('tbody').append(`
+                    <tr>
+                        <td>${formatDate(dueDate)}</td>
+                        <td>PHP ${monthlyPayment.toFixed(2)}</td>
+                        <td>PHP ${(monthlyPayment * 0.05).toFixed(2)}</td>
+                    </tr>
+                `);
+            }
+        }
     });
 </script>
 
 
-    <script src="js/sweetalert.js"></script>
-    <?php 
-    if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
-
-    ?>
-    <script>
-        swal({
-    title: "<?php echo $_SESSION['status']; ?>",
-    icon: "<?php echo $_SESSION['status-code']; ?>",
-    button: "DONE",
+<script>
+$(document).ready(function() {
+    // Show or hide the transaction number field based on payment method selection
+    $('#payment_method').change(function() {
+        var paymentMethod = $(this).val();
+        if (paymentMethod !== 'CASH') {
+            $('#transaction_number_group').show();  // Show if payment method is not 'CASH'
+        } else {
+            $('#transaction_number_group').hide();  // Hide if payment method is 'CASH'
+        }
     });
-    </script>
-    <?php
-    unset($_SESSION['status']);
-    }
-    ?>
 
-</body>
+    $('#payment_method').trigger('change');
+});
+</script>
+
+
+<script src="js/sweetalert.js"></script>
+<?php 
+if (isset($_SESSION['status']) && $_SESSION['status'] != '') {
+
+?>
+<script>
+    swal({
+title: "<?php echo $_SESSION['status']; ?>",
+icon: "<?php echo $_SESSION['status-code']; ?>",
+button: "DONE",
+});
+</script>
+<?php
+unset($_SESSION['status']);
+}
+?>
 
 </html>
