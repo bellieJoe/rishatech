@@ -934,7 +934,7 @@ public function registerCustomer($admin_id, $full_name, $complete_address, $muni
 public function getClientUserByUsername($username) {
     $connection = $this->getConnection();   
 
-    $stmt = $connection->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt = $connection->prepare("SELECT *, customers.id AS customer_id FROM users LEFT JOIN customers ON users.id = customers.user_id WHERE username = ? ");
     $stmt->execute([$username]);
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -1014,6 +1014,99 @@ public function getCustomerByID($customer_id) {
     return $result;
 }
 
+public function getTotalCreditPayments($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT sum(amount_paid) FROM customer_credit_payment WHERE customer_id = ?");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetchColumn();
+
+    return $result;
+}
+public function getTotalCashPayments($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT sum(total_sales) FROM sales WHERE customer_id = ? AND payment_type = 'Cash'");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetchColumn();
+
+    return $result;
+}
+
+public function recentPurchases($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM sales 
+                        LEFT JOIN appliances ON appliances.id = sales.appliances_id
+                        WHERE customer_id = ? ORDER BY sales.id DESC LIMIT 5");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function getCustomerPurchaseHistory($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM sales 
+                        LEFT JOIN appliances ON appliances.id = sales.appliances_id
+                        WHERE customer_id = ? ORDER BY sales.id DESC");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function getCustomersActiveCredits($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT *, sales.status as sales_status FROM sales 
+                                INNER JOIN customer_credit_payment ON customer_credit_payment.sales_id = sales.id
+                                LEFT JOIN appliances ON appliances.id = sales.appliances_id
+                                WHERE sales.customer_id = ? 
+                                AND sales.payment_type = 'Credit'
+                                AND customer_credit_payment.amount_paid = 0
+                                GROUP BY sales.id;");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+
+}
+
+public function getCustomersInctiveCredits($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT *, sales.status as sales_status FROM sales 
+                                INNER JOIN customer_credit_payment ON customer_credit_payment.sales_id = sales.id
+                                LEFT JOIN appliances ON appliances.id = sales.appliances_id
+                                WHERE sales.customer_id = ? 
+                                AND sales.payment_type = 'Credit'
+                                AND sales.status = 'FULLY PAID'
+                                GROUP BY sales.id;");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+
+}
+
+public function getCreditPaymnetsBySalesId($sales_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM customer_credit_payment WHERE sales_id = ?");
+    $stmt->execute([$sales_id]);
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
 
 }
 

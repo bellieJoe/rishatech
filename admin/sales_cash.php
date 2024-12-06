@@ -150,7 +150,7 @@ require_once 'templates/admin_header.php';
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="dataTableCash" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                            
@@ -179,12 +179,13 @@ require_once 'templates/admin_header.php';
                                         ?>
                                         <tr>
                                           
-                                            <td><?= date("M d, Y", strtotime($key['date_created'])) ?></td>
+                                            <!-- <td><?= date("M d, Y", strtotime($key['date_created'])) ?></td> -->
+                                            <td><?=$key['date_created']?></td>
                                             <td><?=$key['full_name']?></td>
                                             <td><?=$key['appliances_name']?></td>
                                             <td><?=$key['cat_name']?></td>
                                             <td><?=$key['sales_qty']?> <?=$key['unit_measurement']?></td>
-                                            <td>₱ <?= number_format($key['total_sales'], 2) ?></td>
+                                            <td><?=$key['total_sales']?></td>
                                             <td><?=$key['discount_promotion']?></td>
                                             <td><?=$key['payment_type']?></td>
                                             <td><?=$key['payment_method']?></td>
@@ -340,5 +341,30 @@ require_once 'templates/admin_header.php';
     ?>
 
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('#dataTableCash').DataTable({
+            columnDefs: [
+                {
+                    targets: 0, // Date of Avail Index
+                    render: function(data, type, row) {
+                        return type === 'display' || type === 'filter' 
+                            ? new Date(data).toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' })
+                            : data; 
+                    }
+                },
+                {
+                    targets: 5, // Total Sales Index
+                    render: function(data, type, row) {
+                        return type === 'display' || type === 'filter' 
+                            ? '₱ ' + parseFloat(data).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                            : parseFloat(data); // Use numeric value for sorting
+                    }
+                }
+            ]
+        });
+    });
+</script>
 
 </html>

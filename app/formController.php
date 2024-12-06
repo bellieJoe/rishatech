@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ClientLogin'])) {
         echo $th;
         $_SESSION['message'] = [
             "status" => "error",
-            "message" => "An unexpected error occured while registering a customer. Try again."
+            "message" => "An unexpected error occured . Try again."
         ];
         header("location: ".BASE_URL."/client/index.php");  
         exit();

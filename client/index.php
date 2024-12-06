@@ -18,13 +18,13 @@ if(isset($_SESSION['user'])) {
 
 <body>
 
-<!-- Navigation -->
-<?php require_once 'components/navbar.php';?>
+<div class="vh-100 d-flex flex-column ">
+    <!-- Navigation -->
+    <?php require_once 'components/navbar.php';?>
 
-
-<!-- Login Section -->
-<section class="login-section bg-light py-5">
-    <div class="container">
+    <!-- Login Section -->
+    <section class="login-section bg-light py-5 h-100 ">
+        <div class="container ">
             <?php include './components/error-alert.php'; ?>
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
@@ -57,6 +57,8 @@ if(isset($_SESSION['user'])) {
             </div>
         </div>
     </section>
+</div>
+
     
 </body>
 <!-- scripts -->

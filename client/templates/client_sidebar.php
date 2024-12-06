@@ -15,14 +15,34 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="route.php?route=dashboard">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Client Portal</span></a>
+        <a class="nav-link" href="./dashboard.php">
+            <i class="fas fa-fw fa-home"></i>
+            <span>Client Portal</span>
+        </a>
     </li>
     
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
+
+    <li class="nav-item ">
+        <a class="nav-link" href="./credits.php">
+            <i class="fas fa-fw fa-credit-card"></i>
+            <span>Credits</span>
+        </a>
+    </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="./purchase-history.php">
+            <i class="fas fa-fw fa-history"></i>
+            <span>Purchase History</span>
+        </a>
+    </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="#">
+            <i class="fas fa-fw fa-file-alt"></i>
+            <span>Requirements</span>
+        </a>
+    </li>
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

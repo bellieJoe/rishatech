@@ -12,16 +12,19 @@
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary static-top">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary static-top">
       <div class="container">
         <a class="navbar-brand" href="#"><i class="fa fa-home"></i> RISHATECH</a>
       </div>
-    </nav>
+    </nav> -->
     
-    <section class="py-5">
+    <section class="py-5 bg-light">
         <div class="container">
-            <img src="./admin/img/bg.png" alt="" class="img-fluid mx-auto d-block" style="height: 300px; object-fit: cover; object-position: center;">
-            <h1 class="text-center">Welcome to RISHATECH</h1>
+            <div class="text-center">
+                <img src="./admin/img/bg.png" alt="" class="img-fluid mx-auto d-block rounded-circle" style="height: 300px; object-fit: cover; object-position: center;">
+                <h1 class="display-5 font-weight-bold">A-Risha General Merchandise</h1>
+                <p class="lead">Sales and Credit Management</p>
+            </div>
         </div>
     </section>
 
@@ -29,24 +32,24 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <div class="card border-primary">
+                    <div class="card border-primary h-100">
                         <div class="card-header text-primary text-center">
                             <h5 class="card-title">Client Interface</h5>
                         </div>
-                        <div class="card-body text-center">
-                            <p class="card-text">Manage your sales and credits.</p>
-                            <a href="client/" class="btn btn-primary"><i class="fa fa-user"></i> Goto Client</a>
+                        <div class="card-body text-center d-flex flex-column justify-content-center">
+                            <p class="card-text">View your credit payments, purchases, and credit limit.</p>
+                            <a href="client/" class="btn btn-primary mt-auto"><i class="fa fa-user"></i> Goto Client</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <div class="card border-primary">
+                    <div class="card border-primary h-100">
                         <div class="card-header text-primary text-center">
                             <h5 class="card-title">Admin Interface</h5>
                         </div>
-                        <div class="card-body text-center">
-                            <p class="card-text">Manage your sales and credits and many more.</p>
-                            <a href="admin/" class="btn btn-primary"><i class="fa fa-lock"></i> Goto Admin</a>
+                        <div class="card-body text-center d-flex flex-column justify-content-center">
+                            <p class="card-text">Manage your sales and credits, view payment history, add new products, generate reports and many more.</p>
+                            <a href="admin/" class="btn btn-primary mt-auto "><i class="fa fa-lock"></i> Goto Admin</a>
                         </div>
                     </div>
                 </div>

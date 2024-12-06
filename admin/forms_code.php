@@ -1023,6 +1023,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
         // Get the price of the appliances
         $selectAppliances = $db->selectAppliances($appliances_id);
 
+        $customer = $db->getCustomerByID($customer_id);
+
+        if(!$customer) {
+            $_SESSION['status'] = "Customer Not Existing";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=allsales");
+            exit();
+        }
+
         if ($selectAppliances) {
             $price = $selectAppliances['price'];
             $total_price = $price * $qty; // Calculate the total price for the quantity
@@ -1089,6 +1098,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
                     $total_sales = $price_plus_interest; // Total sales with interest
                     $monthly_payment = ($price_plus_interest - $downpayment) / $months_to_pay; // Spread payment over months
                 }
+
             }
         } else {
             $_SESSION['status'] = "Appliances Not Existing";
@@ -1097,15 +1107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
             exit();
         }
 
-        $customer = $db->getCustomerByID($customer_id);
-
-        if(!$customer) {
-            $_SESSION['status'] = "Customer Not Existing";
-            $_SESSION['status-code'] = "error";
-            header("location: route.php?route=allsales");
-            exit();
-        }
-
+        
         if($payment_type == 'Credit' && $customer['credit_limit'] < $total_sales) {
             $_SESSION['status'] = "Customer Credit Limit is not enough";
             $_SESSION['status-code'] = "error";
@@ -1114,8 +1116,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
         }
 
         // update customers credit limit here
-
-
+        $_updated_credit_limit = $customer['credit_limit'] - ($price_plus_interest - $downpayment);
+        $updateCreditLimit =  $db->updateCreditLimit($customer_id, $_updated_credit_limit);
+        if(!$updateCreditLimit) {
+            $_SESSION['status'] = "Failed to update customers credit limit";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=allsales");
+            exit();
+        }
+        
         // Insert Customer Sales with the updated total_sales
         $insertCustomerSales = $db->insertCustomerSales($admin_id, $customer_id, $appliances_id, $qty, $total_sales, $discount, $payment_type, $payment_method, $transaction_number, $months_to_pay, $monthly_payment, $downpayment, $interest, $status, $currentDate);
 
