@@ -9,6 +9,7 @@ require_once 'templates/admin_header.php';
 
 <!-- Custom styles for this page -->
 <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script src="vendor/jquery/jquery.min.js"></script>
 
 <body id="page-top">
 
@@ -161,37 +162,107 @@ require_once 'templates/admin_header.php';
                                                 <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#ViewPayment_<?=$key['Sales_Id']?>">
                                                   View Payment
                                                 </button>
-                                                
-                                                <!-- Modal -->
+                                                <!-- Modal-->
                                                 <div class="modal fade" id="InsertPayment_<?=$key['Sales_Id']?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="paymentModalLabel">Record Monthly Payment</h5>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
+                                                                    <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
                                                             <form action="forms_code.php" method="POST">
-                                                                <!-- Include CSRF token as a hidden input field -->
+                                                                <!-- CSRF Token -->
                                                                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
                                                                 <input type="hidden" name="sales_id" value="<?=$key['Sales_Id']?>">
-                                                                <!-- <input type="hidden" name="customer_id" value="<?=$key['customer_id']?>">
 
-                                                                <input type="hidden" name="date_of_avail" value="<?=$key['date_created']?>">
-
-                                                                <input type="hidden" name="months_to_pay" value="<?=$key['months_to_pay']?>"> -->
-                                                                
+                                                                <?php
+                                                                $sales_id = $key['Sales_Id'];
+                                                                $credits = $db->getUnpaidCreditsBySalesID($sales_id);
+                                                                ?>
                                                                 <div class="modal-body">
+                                                                    <!-- Due Date Selection -->
                                                                     <div class="form-group">
-                                                                        <label for="payment_date">Payment Date</label>
-                                                                        <input type="date" class="form-control" name="payment_date" min="<?= date('Y-m-d'); ?>" required>
+                                                                        <label for="due_date_<?=$key['Sales_Id']?>">Due Date</label>
+                                                                        <select class="form-control" name="due_date" id="due_date_<?=$key['Sales_Id']?>" required>
+                                                                            <option disabled selected>--- SELECT DUE DATE ---</option>
+                                                                            <?php
+                                                                            foreach ($credits as $credit) {
+                                                                                echo '<option value="' . $credit['payment_date'] . '">' . date('F j, Y', strtotime($credit['payment_date'])) . '</option>';
+                                                                            }
+                                                                            ?>
+                                                                        </select>
                                                                     </div>
+
+                                                                    <!-- Payment Date Input -->
                                                                     <div class="form-group">
-                                                                        <label for="amount_paid">Amount Paid</label>
-                                                                        <input type="number" class="form-control" name="amount_paid" value="<?=$key['monthly_payment']?>" required>
+                                                                        <label for="payment_date_<?=$key['Sales_Id']?>">Payment Date</label>
+                                                                        <input type="date" class="form-control" name="payment_date" id="payment_date_<?=$key['Sales_Id']?>" max="<?= date('Y-m-d'); ?>" required>
                                                                     </div>
+
+                                                                    <!-- Hidden Fields -->
+                                                                    <input type="hidden" class="form-control" name="amount_paid" value="<?=$key['monthly_payment']?>" readonly required>
+
+                                                                    <!-- Payment Details Table -->
+                                                                    <table class="table border table-bordered">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td><strong>Monthly Payment</strong></td>
+                                                                                <td><?php echo 'PHP ' . number_format($key['monthly_payment'], 2); ?></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td><strong>Penalty</strong></td>
+                                                                                <td id="penalty_<?=$key['Sales_Id']?>">PHP 0.00</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                    <script>
+                                                                        $(document).ready(function () {
+                                                                            var sales_id = '<?=$key['Sales_Id']?>';
+                                                                            var amount_to_pay = <?=$key['monthly_payment']?>;
+                                                                            var $penalty = $('#penalty_' + sales_id);
+                                                                            var $payment_date = $('#payment_date_' + sales_id);
+                                                                            var $due_date = $('#due_date_' + sales_id);
+
+                                                                            function calculatePenalty() {
+                                                                                var due_date_value = $due_date.val();
+                                                                                var payment_date_value = $payment_date.val();
+
+                                                                                if (!due_date_value || !payment_date_value) {
+                                                                                    $penalty.text('PHP 0.00'); // Reset penalty if either date is missing
+                                                                                    return;
+                                                                                }
+
+                                                                                var due_date = new Date(due_date_value);
+                                                                                var payment_date = new Date(payment_date_value);
+
+                                                                                // Set both dates to midnight
+                                                                                due_date.setHours(0, 0, 0, 0);
+                                                                                payment_date.setHours(0, 0, 0, 0);
+
+                                                                                var number_of_days = Math.ceil((payment_date - due_date) / (1000 * 60 * 60 * 24));
+
+                                                                                if (number_of_days <= 0) {
+                                                                                    // Future or same-day payment: No penalty
+                                                                                    $penalty.text('PHP 0.00');
+                                                                                } else {
+                                                                                    // Late payment: 5% per day
+                                                                                    var penalty = amount_to_pay * 0.05 * number_of_days;
+                                                                                    $penalty.text('PHP ' + penalty.toFixed(2));
+                                                                                }
+                                                                            }
+
+                                                                            // Trigger penalty calculation on date changes
+                                                                            $due_date.on('change', calculatePenalty);
+                                                                            $payment_date.on('change', calculatePenalty);
+
+                                                                            // Trigger penalty calculation on page load
+                                                                            calculatePenalty();
+                                                                        });
+                                                                    </script>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -201,6 +272,7 @@ require_once 'templates/admin_header.php';
                                                         </div>
                                                     </div>
                                                 </div>
+
 
                                                 <!-- Payment History Modal -->
                                                 <div class="modal fade" id="ViewPayment_<?=$key['Sales_Id']?>" tabindex="-1" aria-labelledby="paymentHistoryModalLabel" aria-hidden="true">

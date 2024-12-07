@@ -61,7 +61,15 @@
                                             <td><?php echo $row['months_to_pay'];?></td>
                                             <td><?php echo $row['sales_status'];?></td>
                                             <td>
-                                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#ViewPayment_<?=$row['sales_id']?>">View Payments</button>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Actions
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item" href="<?php echo BASE_URL;?>/client/soa.php?sales_id=<?=$row['sales_id']?>" target="_blank"><i class="fa fa-file mr-2"></i>View SOA</a>
+                                                        <a class="dropdown-item" data-toggle="modal" data-target="#ViewPayment_<?=$row['sales_id']?>"><i class="fa fa-history mr-2"></i>View Payments</a>
+                                                    </div>
+                                                </div>
 
                                                 <div class="modal fade" id="ViewPayment_<?=$row['sales_id']?>" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog modal-lg">
@@ -79,6 +87,7 @@
                                                                             <tr>
                                                                                 <th>Due Date</th>
                                                                                 <th>Amount to Pay</th>
+                                                                                <th>Date Paid</th>
                                                                                 <th>Amount Paid</th>
                                                                                 <th>Status</th>
                                                                             </tr>
@@ -92,6 +101,7 @@
                                                                             <tr>
                                                                                 <td><?php echo date("M d, Y", strtotime($payment['payment_date']));?></td>
                                                                                 <td>PHP <?php echo number_format($row['monthly_payment'], 2);?></td>
+                                                                                <td><?php echo $payment['date_paid'] == null ? "-" : date("M d, Y", strtotime($payment['date_paid']));?></td>
                                                                                 <td>PHP <?php echo number_format($payment['amount_paid'], 2);?></td>
                                                                                 <td><?php echo $payment['payment_status'];?></td>
                                                                             </tr>
@@ -145,8 +155,15 @@
                                             <td><?php echo $row['months_to_pay'];?></td>
                                             <td><?php echo $row['sales_status'];?></td>
                                             <td>
-                                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#ViewPayment_<?=$row['sales_id']?>">View Payments</button>
-
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Actions
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item" data-toggle="modal" data-target="#ViewPayment_<?=$row['sales_id']?>">View Payments</a>
+                                                        <a class="dropdown-item" href="<?php echo BASE_URL;?>/client/soa.php?sales_id=<?=$row['sales_id']?>" target="_blank"><i class="fa fa-file mr-2"></i>View SOA</a>
+                                                    </div>
+                                                </div>
                                                 <div class="modal fade" id="ViewPayment_<?=$row['sales_id']?>" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog modal-lg">
                                                         <div class="modal-content">
@@ -164,6 +181,7 @@
                                                                                 <th>Due Date</th>
                                                                                 <th>Amount to Pay</th>
                                                                                 <th>Amount Paid</th>
+                                                                                <th>Date Paid</th>
                                                                                 <th>Status</th>
                                                                             </tr>
                                                                         </thead>
@@ -177,6 +195,7 @@
                                                                                 <td><?php echo date("M d, Y", strtotime($payment['payment_date']));?></td>
                                                                                 <td>PHP <?php echo number_format($row['monthly_payment'], 2);?></td>
                                                                                 <td>PHP <?php echo number_format($payment['amount_paid'], 2);?></td>
+                                                                                <td><?php echo date("M d, Y", strtotime($payment['date_paid']));?></td>
                                                                                 <td><?php echo $payment['payment_status'];?></td>
                                                                             </tr>
                                                                             <?php

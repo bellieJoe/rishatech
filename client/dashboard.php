@@ -153,7 +153,7 @@
                                                 ?>
                                                 <tr>
                                                     <td><?php echo date('M d, Y', strtotime($row['date_created'])); ?></td>
-                                                    <td>PHP <?=$row['appliances_name']?></td>
+                                                    <td><?=$row['appliances_name']?></td>
                                                     <td>PHP <?php echo number_format($row['total_sales'], 2); ?></td>
                                                     <td><?php echo $row['payment_type']; ?></td>
                                                 </tr>

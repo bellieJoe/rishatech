@@ -1197,6 +1197,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save_payment'])) {
     // Get the current date
     $currentDate = date('Y-m-d'); // or use $payment_date if you are using a custom payment date
 
+    $sales = $db->getSalesById($sales_id);
+
+    if(!$sales) {
+        $_SESSION['status'] = "Sales Not Existing";
+        $_SESSION['status-code'] = "error";
+        header("location: route.php?route=allsales");
+        exit();
+    }
+
     foreach ($selectAllCreditPaymentDate as $paymentRecord) {
         if ($firstRecord) {
             // Extract the 'id' from the first record
@@ -1210,10 +1219,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save_payment'])) {
             $storedDate = strtotime($storedPaymentDate); // Convert stored date to timestamp
             $submittedDate = strtotime($payment_date); // Convert submitted payment date to timestamp
 
+            $daysDifference = ($submittedDate - $storedDate) / (60 * 60 * 24);
+
             // If the submitted payment date is after the stored payment date, mark it as 'Late'
             if ($submittedDate > $storedDate) {
                 $status = 'LATE PAID'; // Mark as late if the payment is after the due date
-                $amount_paid = sanitizeInput($_POST['amount_paid']) * 1.05;
+                $amount_paid = sanitizeInput($_POST['amount_paid']) + ($sales['monthly_payment'] * 0.05 * $daysDifference);
             }
 
             // Set the flag to false to stop after the first iteration

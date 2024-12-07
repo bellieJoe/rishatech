@@ -782,7 +782,7 @@ public function updatePayment($amount_paid, $status, $id) {
     $connection = $this->getConnection();
     // Prepare the statement
     $stmt = $connection->prepare("UPDATE customer_credit_payment 
-              SET amount_paid = ?, payment_status = ? 
+              SET amount_paid = ?, payment_status = ?, date_paid = CURRENT_DATE()
               WHERE id = ?");
 
     // Bind the parameters to the query
@@ -791,6 +791,16 @@ public function updatePayment($amount_paid, $status, $id) {
     return $result;
 }
 
+
+public function getUnpaidCreditsBySalesID($sales_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM customer_credit_payment WHERE sales_id = ? AND (amount_paid = 0 OR amount_paid IS NULL) AND (payment_status = '' OR payment_status IS NULL)");
+    $stmt->execute([$sales_id]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);    
+
+    return $result;
+}
 
 
 //-------------------------------------------------------------------------------------------------------DELETE CUSTOMER CREDIT PAYMENT
@@ -1104,6 +1114,28 @@ public function getCreditPaymnetsBySalesId($sales_id) {
     $stmt->execute([$sales_id]);
 
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function getSalesById($sales_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM sales WHERE id = ?");
+    $stmt->execute([$sales_id]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function countPaidCreditsBySalesId($sales_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT COUNT(*) FROM customer_credit_payment WHERE sales_id = ? AND amount_paid > 0");
+    $stmt->execute([$sales_id]);
+
+    $result = $stmt->fetchColumn();
 
     return $result;
 }
