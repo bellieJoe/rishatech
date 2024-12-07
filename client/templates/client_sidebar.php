@@ -1,5 +1,11 @@
-<ul class="navbar-nav sidebar  accordion border" id="accordionSidebar">
+<?php 
+    require_once '../db_connection/config.php';
 
+    $db = new Database();
+
+
+?>
+<ul class="navbar-nav sidebar  accordion border" id="accordionSidebar">
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="route.php?route=dashboard">
         <div class="sidebar-brand-icon">
@@ -26,9 +32,15 @@
     <hr class="sidebar-divider d-none d-md-block">
 
     <li class="nav-item ">
+        <a class="nav-link" href="./overdue-payments.php">
+            <i class="fas fa-fw fa-bell text-warning"></i>
+           <span>Overdue Payments <span class="badge badge-danger  "><small><?= $db->countCustomerPassDuePayments($_SESSION['user']['customer_id']) ?></small></span></span>
+        </a>
+    </li>
+    <li class="nav-item ">
         <a class="nav-link" href="./credits.php">
-            <i class="fas fa-fw fa-credit-card"></i>
-            <span>Credits</span>
+             <i class="fas fa-fw fa-credit-card"></i>
+           <span>Credits</span>
         </a>
     </li>
     <li class="nav-item ">

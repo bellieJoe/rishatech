@@ -1140,6 +1140,87 @@ public function countPaidCreditsBySalesId($sales_id) {
     return $result;
 }
 
+public function getCustomerPassDuePayments($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("
+    SELECT 
+        `customer_credit_payment`.*,
+        `customers`.*,
+        `sales`.*,
+        `appliances`.*,
+        DATEDIFF(CURRENT_DATE(), `customer_credit_payment`.`payment_date`) AS overdue_days,
+        (DATEDIFF(CURRENT_DATE(), `customer_credit_payment`.`payment_date`) * 0.05 * `sales`.`monthly_payment`) AS penalty
+    FROM 
+        `customer_credit_payment`
+    LEFT JOIN 
+        `customers` ON `customers`.`id` = `customer_credit_payment`.`customer_id`
+    LEFT JOIN 
+        `sales` ON `sales`.`id` = `customer_credit_payment`.`sales_id`
+    LEFT JOIN 
+        `appliances` ON `appliances`.`id` = `sales`.`appliances_id`
+    WHERE 
+        `customer_credit_payment`.`customer_id` = ?
+        AND `customer_credit_payment`.`amount_paid` = 0
+        AND CURRENT_DATE() > `customer_credit_payment`.`payment_date`;
+    ");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function getCustomerUpcomingPayments($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("
+    SELECT 
+        `customer_credit_payment`.*,
+        `customers`.*,
+        `sales`.*,
+        `appliances`.*,
+        DATEDIFF(`customer_credit_payment`.`payment_date`, CURRENT_DATE()) AS days_to_due_date
+    FROM 
+        `customer_credit_payment`
+    LEFT JOIN 
+        `customers` ON `customers`.`id` = `customer_credit_payment`.`customer_id`
+    LEFT JOIN 
+        `sales` ON `sales`.`id` = `customer_credit_payment`.`sales_id`
+    LEFT JOIN 
+        `appliances` ON `appliances`.`id` = `sales`.`appliances_id`
+    WHERE 
+        `customer_credit_payment`.`customer_id` = ?
+        AND `customer_credit_payment`.`amount_paid` = 0
+        AND `customer_credit_payment`.`payment_date` BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), INTERVAL 5 DAY);
+    ");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function countCustomerPassDuePayments($customer_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("
+    SELECT 
+        count(*)
+    FROM 
+        `customer_credit_payment`
+    WHERE 
+        `customer_credit_payment`.`customer_id` = ?
+        AND `customer_credit_payment`.`amount_paid` = 0
+        AND CURRENT_DATE() > `customer_credit_payment`.`payment_date`;
+    ");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetchColumn();
+
+    return $result;
+}
+
 }
 
 ?>
