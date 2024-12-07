@@ -88,14 +88,39 @@
             <i class="fas fa-fw fa-tag"></i>
             <span>Discounts & Promotions</span></a>
     </li>
-	 <li class="nav-item">
-    <a class="nav-link" href="financial_reports.php?route=financial_reports">
-        <i class="fas fa-chart-line"></i>
-        <span>Reports</span>
-    </a>
-</li>
-<br>
- <li class="nav-item">
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse5"
+            aria-expanded="true" aria-controls="collapse5">
+            <i class="fas fa-fw fa-file-alt"></i>
+            <span>Reports</span>
+        </a>
+        
+        <div id="collapse5" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="financial_reports.php?route=financial_reports">
+                    <span>Reports</span>
+                </a>
+                <a class="collapse-item" href="customers_list_report.php">
+                    <span>Customers List</span>
+                </a>
+                <a class="collapse-item text-wrap" href="customers_w_overdue_report.php">
+                    <span>Customers w/ Overdue Payments</span>
+                </a>
+                <a class="collapse-item text-wrap" href="customers_w_active_credits.php">
+                    <span>Customers w/ Active Credits</span>
+                </a>
+                <a class="collapse-item text-wrap" href="customers_w_overdue_report.php">
+                    <span>Customers w/ Settled Credits</span>
+                </a>
+            </div>
+        </div>
+    </li>
+
+    <br>
+
+    <li class="nav-item">
       <a class="nav-link" href="terms.php?route=terms">
         <i class="fas fa-cog"></i>
         <span>Terms and Conditions</span>

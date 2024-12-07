@@ -359,7 +359,7 @@ public function deleteAppliances($appliances_id) {
 public function selectAllCustomers() {
     $connection = $this->getConnection();
 
-    $stmt = $connection->prepare("SELECT * FROM customers");
+    $stmt = $connection->prepare("SELECT * FROM customers ORDER BY full_name ASC");
     $stmt->execute();
 
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1217,6 +1217,88 @@ public function countCustomerPassDuePayments($customer_id) {
     $stmt->execute([$customer_id]);
 
     $result = $stmt->fetchColumn();
+
+    return $result;
+}
+
+public function getRequirementByCustomerId($customer_id) {
+
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("
+    SELECT 
+        *
+    FROM 
+        `requirements`
+    WHERE 
+        `customer_id` = ?;
+    ");
+    $stmt->execute([$customer_id]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+    
+}
+
+public function getCustomersWithOverduePayments() {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("
+        SELECT 
+            customers.*,
+            (
+                SELECT COUNT(*) FROM `customer_credit_payment` WHERE `customer_credit_payment`.`customer_id` = `customers`.`id` AND 		`amount_paid` = 0 AND CURRENT_DATE > `customer_credit_payment`.`payment_date`
+            ) as overdue_count
+        FROM `customers`
+        LEFT JOIN `customer_credit_payment` ON `customers`.`id` = `customer_credit_payment`.`customer_id`
+        WHERE 
+            `customer_credit_payment`.`amount_paid` = 0 
+        AND 
+            `customer_credit_payment`.`payment_date` < CURRENT_DATE()
+        GROUP BY `customers`.`id` ORDER BY full_name ASC;
+    ");
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function getCustomersWithActiveCredits() {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("
+        SELECT 
+            customers.*,
+            COUNT(DISTINCT customer_credit_payment.sales_id) AS credit_count
+        FROM `customers`
+        LEFT JOIN `customer_credit_payment` ON `customers`.`id` = `customer_credit_payment`.`customer_id`
+        WHERE 
+            `customer_credit_payment`.`amount_paid` = 0 
+        GROUP BY `customers`.`id`
+        ORDER BY `customers`.`id` ASC;
+    ");
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+
+public function computeTotalSalesByPaymentType($payment_type) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("
+        SELECT 
+            sum(total_sales) as total
+        FROM `sales`
+        WHERE `payment_type` = ?;
+    ");
+    $stmt->execute([$payment_type]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return $result;
 }

@@ -1285,6 +1285,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save_payment'])) {
         // Update the payment data in the database
         $UPDATE_PAYMENT = $db->updatePayment($amount_paid, $status, $id);
 
+        // Update the credit limit
+        $customer = $db->getCustomerByID($sales['customer_id']);
+
+        if(!$customer) {
+            $_SESSION['status'] = "Customer Not Existing";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=allsales");
+            exit();
+        }
+        
+        $db->updateCreditLimit($sales['customer_id'], $customer['credit_limit'] + $sales['monthly_payment']);
+
         if ($UPDATE_PAYMENT && $updateSales_fully_paid) {
             $_SESSION['status'] = "Payment added";
             $_SESSION['status-code'] = "success";

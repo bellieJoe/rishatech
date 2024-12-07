@@ -2,7 +2,9 @@
 <html lang="en">
 
 <!-- HEADER -->
-<?php require_once 'templates/admin_header.php'; ?>
+<?php 
+require_once 'templates/admin_header.php'; 
+?>
 
 <style>
     /* Center cards and rows */
@@ -66,10 +68,32 @@
                     </div>
 
                     <!-- Cards Section -->
-                    <div class="row center-content">
+                    <div class="row mb-4">
+                        <!-- Appliances Card -->
+                        <div class="col-sm mb-2">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Total Sales</div>
+                                            <?php
+                                                $total_sales = $db->computeTotalSalesByPaymentType('Credit')['total'] + $db->computeTotalSalesByPaymentType('Cash')['total'] ;
+                                            ?>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <?php echo 'PHP ' . number_format($total_sales, 2); ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-tools fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Appliances Card -->
-                        <div class="col-xl-3 col-md-6">
+                        <div class="col-sm mb-2">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -93,7 +117,7 @@
                         </div>
 
                         <!-- Customers Card -->
-                        <div class="col-xl-3 col-md-6">
+                        <div class="col-sm mb-2">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -116,7 +140,7 @@
                         </div>
 
                         <!-- Reports Card -->
-                        <div class="col-xl-3 col-md-6">
+                        <!-- <div class="col-sm mb-2">
                             <a href="financial_reports.php" style="text-decoration: none;">
                                 <div class="card border-left-primary shadow h-100 py-2">
                                     <div class="card-body">
@@ -135,16 +159,15 @@
                                     </div>
                                 </div>
                             </a>
-                        </div>
-
+                        </div> -->
                     </div>
 
                     <!-- Chart Section -->
-                    <div class="row center-content">
-                        <!-- Area Chart -->
-                        <div class="col-xl-5 col-lg-7">
-                            <div class="card shadow mb-4 border-0 rounded-lg">
-                                <div class="card-header py-3 bg-gradient-primary text-white">
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <!-- Area Chart -->
+                            <div class="card shadow border-0 rounded-lg h-100">
+                                <div class="card-header py-3 bg-primary text-white">
                                     <h6 class="m-0 font-weight-bold">Total Sales Per Month</h6>
                                 </div>
                                 <div class="card-body">
@@ -152,43 +175,63 @@
                                         <canvas id="myAreaChart"></canvas>
                                     </div>
                                     <hr class="my-4">
+                                    <p class="mb-0"><em>This chart represents the total sales made for each month.</em></p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Donut Chart -->
-                        <div class="col-xl-5 col-lg-7">
-                            <div class="card shadow mb-4 border-0 rounded-lg">
-                                <div class="card-header py-3 bg-gradient-primary text-white">
-                                    <h6 class="m-0 font-weight-bold">Cash & Credit</h6>
+                        <div class="col-lg-6 mb-4">
+                            <!-- Donut Chart -->
+                            <div class="card shadow border-0 rounded-lg h-100">
+                                <div class="card-header py-3 bg-primary text-white">
+                                    <h6 class="m-0 font-weight-bold">Cash & Credit Total Sales</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-bar">
                                         <canvas id="myPieChart"></canvas>
                                     </div>
                                     <hr class="my-4">
-                                    <p class="text-muted">Total of how many paid in Cash and in Credit</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bar Chart -->
-                        <div class="col-xl-10 col-lg-12">
-                            <div class="card shadow mb-4 border-0 rounded-lg">
-                                <div class="card-header py-3 bg-gradient-primary text-white">
-                                    <h6 class="m-0 font-weight-bold">Total Sales by Item</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-bar">
-                                        <canvas id="myBarChart"></canvas>
-                                    </div>
+                                    <p class="text-muted mb-0"><em>Total of how many paid in Cash and in Credit</em></p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                
+                    <!-- Bar Chart -->
+                    <div class="">
+                        <div class="card shadow mb-4 border-0 rounded-lg">
+                            <div class="card-header py-3 bg-primary text-white ">
+                                <h6 class="m-0 font-weight-bold">Total Sales by Item</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-bar">
+                                    <canvas id="myBarChart"></canvas>
+                                </div>
+                                <hr>
+                                <p class="mb-0"><em>This chart provides a detailed breakdown of total sales for each appliance, allowing for insightful analysis and decision-making.</em></p>
+                                </div>
+                        </div>
+                    </div>
 
+                </div>
+                <!-- /.container-fluid -->
+
+                <!-- Footer -->
+                <?php
+                require_once 'templates/admin_footer.php';
+                ?>
+                <!-- End of Footer -->
+
+            </div>
+            <!-- End of Main Content -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    
 </body>
 
 </html>
@@ -196,11 +239,7 @@
 <!-- /.container-fluid -->
 
 
-            <!-- Footer -->
-            <?php
-            require_once 'templates/admin_footer.php';
-            ?>
-            <!-- End of Footer -->
+            
 
         </div>
         <!-- End of Content Wrapper -->
@@ -344,7 +383,8 @@
                 }],
             },
             legend: {
-                display: false
+                display: false,
+                position: 'bottom'
             },
             tooltips: {
                 backgroundColor: "rgb(255,255,255)",
@@ -405,68 +445,76 @@ $salesDataJson = json_encode($salesData);
 ?>
 
 <script>
-    // Chart.js global default settings
-    Chart.defaults.global.defaultFontFamily = 'Nunito, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
-    Chart.defaults.global.defaultFontColor = '#858796';
-
-    // Parse PHP data into JavaScript
-    var labels = <?php echo $labelsJson; ?>;
-    var salesData = <?php echo $salesDataJson; ?>;
-
-    // Filter out any null or undefined values
-    labels = labels.filter(label => label !== null && label !== undefined);
-    salesData = salesData.filter(data => data !== null && data !== undefined);
-
-    // Ensure fallback values for empty arrays
-    if (labels.length === 0) {
-        labels = ['No Data'];
-    }
-    if (salesData.length === 0) {
-        salesData = [0];
-    }
-
-    // Prepend descriptive text to labels
-    var updatedLabels = labels.map(function(label) {
-        return 'Total Paid of ' + label;
-    });
-
-    // Create the doughnut chart
-    var ctx = document.getElementById("myPieChart");
-    var myPieChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: updatedLabels, // Updated labels
-            datasets: [{
-                data: salesData, // Dynamic data
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'], // Colors for slices
-                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'], // Hover colors
-                hoverBorderColor: "rgba(234, 236, 244, 1)",
-            }],
-        },
-        options: {
-            maintainAspectRatio: false,
-            tooltips: {
-                backgroundColor: "rgb(255,255,255)",
-                bodyFontColor: "#858796",
-                borderColor: '#dddfeb',
-                borderWidth: 1,
-                xPadding: 15,
-                yPadding: 15,
-                displayColors: false,
-                caretPadding: 10,
-                callbacks: {
-                    label: function(tooltipItem, data) {
-                        var datasetLabel = data.labels[tooltipItem.index] || '';
-                        var value = data.datasets[0].data[tooltipItem.index] || 0;
-                        return datasetLabel + ': ₱' + value.toLocaleString(); // Format as currency
+    $(document).ready(function() {
+        // Chart.js global default settings
+        Chart.defaults.global.defaultFontFamily = 'Nunito, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+    
+        // Parse PHP data into JavaScript
+        var labels = <?php echo $labelsJson; ?>;
+        var salesData = <?php echo $salesDataJson; ?>;
+    
+        // Filter out any null or undefined values
+        labels = labels.filter(label => label !== null && label !== undefined);
+        salesData = salesData.filter(data => data !== null && data !== undefined);
+    
+        // Ensure fallback values for empty arrays
+        if (labels.length === 0) {
+            labels = ['No Data'];
+        }
+        if (salesData.length === 0) {
+            salesData = [0];
+        }
+    
+    
+        // Prepend descriptive text to labels
+        var updatedLabels = labels.map(function(label) {
+            return 'Total Paid of ' + label;
+        });
+    
+        // Create the doughnut chart
+        var ctx = document.getElementById("myPieChart");
+        var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Total Credit Sales', "Total Cash Sales"
+                ], // Updated labels
+                datasets: [{
+                    data: [
+                        <?= $db->computeTotalSalesByPaymentType('Credit')['total'] ?>, <?= $db->computeTotalSalesByPaymentType('Cash')['total'] ?>
+                    ], // Dynamic data
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'], // Colors for slices
+                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'], // Hover colors
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var datasetLabel = data.labels[tooltipItem.index] || '';
+                            var value = data.datasets[0].data[tooltipItem.index] || 0;
+                            return datasetLabel + ': ₱' + value.toLocaleString(); // Format as currency
+                        }
                     }
-                }
+                },
+                legend: {
+                    display: true, // Set to true if legend display is needed
+                    position: 'bottom',
+                },
+                cutoutPercentage: 60, // Doughnut size
             },
-            legend: {
-                display: false // Set to true if legend display is needed
-            },
-            cutoutPercentage: 80, // Doughnut size
-        },
+        });
     });
 </script>
 
