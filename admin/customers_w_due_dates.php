@@ -5,8 +5,9 @@ $db = new Database();
 
 // Test connection
 
+$date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 
-$customers = $db->getCustomersWithSettledCredits();
+$customers = $db->getCustomerWIthDueDates($date);
 
 ?>
 <!-- HEADER -->
@@ -18,7 +19,7 @@ require_once 'templates/admin_header.php';
 <html lang="en">
 
 <head>
-    <title>Customers with settled credits</title>
+    <title>Customers with due dates</title>
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
         /* CSS for printing only the report content */
@@ -59,7 +60,19 @@ require_once 'templates/admin_header.php';
                 <button id="printButton" class="btn btn-secondary mr-2" onclick="window.print()">Print Report</button>
             </div>
         </div>
-        <h2>Customers w/ Settled Credits</h2>
+        <h2>Customers w/ Due Dates</h2>
+
+        <form action="" method="GET">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="date">Date:</label>
+                    <input type="date" name="date" class="form-control" required value="<?= $date ?>">
+                </div>
+                <div class="form-group col-md-4 align-self-end align-self-end">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
         
 
         <hr>
@@ -68,7 +81,7 @@ require_once 'templates/admin_header.php';
         <div id="printableReport">
             <div class="mb-3">
                 <h4 class="text-center font-weight-bold">A-RISHA GENERAL MERCHANDISE</h4>
-                <h4 class="text-center font-weight-bold">LIST OF CUSTOMERS W/ SETTLED CREDITS</h4>
+                <h4 class="text-center font-weight-bold">LIST OF CUSTOMERS W/ DUE DATES - <?=date('F d, Y', strtotime($date))?></h4>
             </div>
             <table class="table table-bordered border">
                 <thead>
@@ -81,6 +94,11 @@ require_once 'templates/admin_header.php';
                     </tr>
                 </thead>
                 <tbody>
+                    <?php 
+                        if (empty($customers)) {
+                            echo "<tr><td colspan='5'>No customers found.</td></tr>";
+                        }
+                    ?>
                     <?php
                         $index = 1;
                         foreach ($customers as $customer) {

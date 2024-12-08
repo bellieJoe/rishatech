@@ -111,8 +111,11 @@
                 <a class="collapse-item text-wrap" href="customers_w_active_credits.php">
                     <span>Customers w/ Active Credits</span>
                 </a>
-                <a class="collapse-item text-wrap" href="customers_w_overdue_report.php">
+                <a class="collapse-item text-wrap" href="customers_w_settled_credits.php">
                     <span>Customers w/ Settled Credits</span>
+                </a>
+                <a class="collapse-item text-wrap" href="customers_w_due_dates.php">
+                    <span>Customers w/ Due Dates</span>
                 </a>
             </div>
         </div>

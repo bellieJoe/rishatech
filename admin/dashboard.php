@@ -175,7 +175,7 @@ require_once 'templates/admin_header.php';
                                         <canvas id="myAreaChart"></canvas>
                                     </div>
                                     <hr class="my-4">
-                                    <p class="mb-0"><em>This chart represents the total sales made for each month.</em></p>
+                                    <p class="mb-0 text-muted text-center"><em>This chart represents the total sales made for each month.</em></p>
                                 </div>
                             </div>
                         </div>
@@ -191,7 +191,7 @@ require_once 'templates/admin_header.php';
                                         <canvas id="myPieChart"></canvas>
                                     </div>
                                     <hr class="my-4">
-                                    <p class="text-muted mb-0"><em>Total of how many paid in Cash and in Credit</em></p>
+                                    <p class="text-muted text-center mb-0"><em>Total of how many paid in Cash and in Credit</em></p>
                                 </div>
                             </div>
                         </div>
@@ -208,7 +208,7 @@ require_once 'templates/admin_header.php';
                                     <canvas id="myBarChart"></canvas>
                                 </div>
                                 <hr>
-                                <p class="mb-0"><em>This chart provides a detailed breakdown of total sales for each appliance, allowing for insightful analysis and decision-making.</em></p>
+                                <p class="mb-0 text-center"><em>This chart provides a detailed breakdown of total sales for each appliance, allowing for insightful analysis and decision-making.</em></p>
                                 </div>
                         </div>
                     </div>

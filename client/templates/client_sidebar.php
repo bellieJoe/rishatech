@@ -34,7 +34,7 @@
     <li class="nav-item ">
         <a class="nav-link" href="./overdue-payments.php">
             <i class="fas fa-fw fa-bell text-warning"></i>
-           <span>Overdue Payments <span class="badge badge-danger  "><small><?= $db->countCustomerPassDuePayments($_SESSION['user']['customer_id']) ?></small></span></span>
+           <span>Payments Due</span>
         </a>
     </li>
     <li class="nav-item ">

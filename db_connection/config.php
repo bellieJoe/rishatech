@@ -1192,7 +1192,8 @@ public function getCustomerUpcomingPayments($customer_id) {
     WHERE 
         `customer_credit_payment`.`customer_id` = ?
         AND `customer_credit_payment`.`amount_paid` = 0
-        AND `customer_credit_payment`.`payment_date` BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), INTERVAL 5 DAY);
+        AND `customer_credit_payment`.`payment_date` BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)
+    ORDER BY `payment_date` ASC;
     ");
     $stmt->execute([$customer_id]);
 
@@ -1301,6 +1302,43 @@ public function computeTotalSalesByPaymentType($payment_type) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return $result;
+}
+
+public function getCustomersWithSettledCredits() {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("
+        SELECT * FROM customers
+        JOIN sales ON sales.customer_id = customers.id
+        WHERE 
+            sales.payment_type = 'Credit'
+        AND 
+        sales.status = 'FULLY PAID';
+    ");
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function getCustomerWIthDueDates($date) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("
+        SELECT * FROM customers
+        LEFT JOIN customer_credit_payment ON customer_credit_payment.customer_id = customers.id
+        WHERE 
+            customer_credit_payment.payment_date = ?
+        AND 
+            customer_credit_payment.amount_paid = 0;
+    ");
+    $stmt->execute([$date]);
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+ 
 }
 
 }

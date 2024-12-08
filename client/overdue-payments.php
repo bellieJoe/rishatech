@@ -89,7 +89,7 @@
                             <?php } ?>
                             <?php if (count($upcoming) > 0) { ?>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTableActiveCredits" width="100%" cellspacing="0">
+                                    <table class="table table-bordered" id="dataTableUpcomingPayments" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th>Item</th>
@@ -160,11 +160,10 @@ if (isset($_SESSION['message']) && $_SESSION['message']['message'] != '') {
             },
             "order": [[ 0, "desc" ]]
         });
-        $('#dataTableInactiveCredits').DataTable({
+        $('#dataTableUpcomingPayments').DataTable({
             language: {
                 emptyTable: "No Inactive Credits" // Custom message
-            },
-            "order": [[ 0, "desc" ]]
+            }
         });
     });
 </script>
