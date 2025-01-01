@@ -109,6 +109,7 @@ if (isset($_POST['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf_toke
                         'full_name' => $selectAdminLogin['full_name'],
                         'username' => $selectAdminLogin['username'],
                         'email' => $selectAdminLogin['email'],
+                        'image' => $selectAdminLogin['image']
                     ];
 
                     $_SESSION['status'] = "Log In Success";
@@ -1314,16 +1315,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save_payment'])) {
     
 }
 
-
-
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------ADD DISCOUNTS & PROMOTIONS
 
@@ -1410,7 +1401,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
     header("location: route.php?route=discount_promotions");
     exit();
 }  
-// } else {
+// else {
 //     echo "<script>alert('Invalid CSRF Token test!'); window.location.href = 'index.php?route=home';</script>";
 // }
 
@@ -1420,7 +1411,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
  * @credits ICTSC.DEVS
 */
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['RegisterCustomer'])) {
-
         try {
             // $admin_id = sanitizeInput($_POST['admin_id']);
             $full_name = sanitizeInput($_POST['full_name']);
@@ -1580,14 +1570,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
 
     }
 
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change_profile_image'])) {   
+
+        $admin_id = sanitizeInput($_POST['admin_id']);
+    
+        $filename = rand(100,999) . '-' . $admin_id . "-" . $_FILES['user_image']['name'];
+        $file_tmp = $_FILES['user_image']['tmp_name'];
+        $upload_dir = "uploads/admin/profile/";
+        $upload_path = $upload_dir . $filename;
+
+    
+        $uploadmove_file = move_uploaded_file($file_tmp, $upload_path);
+    
+        if ($uploadmove_file) {
+            $uploadImage = $db->uploadImage($admin_id, $upload_path);
+    
+            if($uploadImage){
+                $_SESSION['auth_user']['image'] = $upload_path;
+                $_SESSION['status'] = "Image Uploaded";
+                $_SESSION['status-code'] = "success";
+                header("location: route.php?route=view_profile");
+                exit();
+            } else {
+                $_SESSION['status'] = "ERROR! Failed to upload profile picture. Try Again.";
+                $_SESSION['status-code'] = "error";
+                header("location: route.php?route=view_profile");
+                exit();
+            }
+    
+        }  
+    }
+
 
 /*
  * END OF REVISIONS
  * @credits ICTSC.DEVS
-*/
-
-
-
+`*/
 }
+else {
+    echo "<script>alert('Invalid CSRF Token test!'); window.location.href = 'index.php?route=home';</script>";
+}
+
 
 ?>

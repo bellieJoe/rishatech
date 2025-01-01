@@ -30,6 +30,7 @@ $barangays = $db->getBarangays();
                 <form action="../admin/forms_code.php" method="post">
                     <!-- Include CSRF token as a hidden input field -->
                     <!-- <input type="hidden" name="is_client" value="true"> -->
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
                     <div class="form-group">
                         <label for="username">Username</label>

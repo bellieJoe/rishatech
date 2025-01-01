@@ -545,6 +545,7 @@ public function uploadReceipt($sales_id, $receipts_upload_path) {
 
 
 
+
 //-------------------------------------------------------------------------------------------------------SELECT ALL SALES FULLY PAID CHART
 public function selectAllSales_FULLYPaid_AreaChart($status){
     $connection = $this->getConnection();
@@ -1339,6 +1340,15 @@ public function getCustomerWIthDueDates($date) {
 
     return $result;
  
+}
+
+public function uploadImage($admin_id, $filename) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE admin_account SET image = ? WHERE id = ?");
+    $result = $stmt->execute([$filename, $admin_id]);
+
+    return $result;
 }
 
 }
