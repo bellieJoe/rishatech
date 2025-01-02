@@ -520,6 +520,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updateAdminInfo'])) {
         $category_name = sanitizeInput($_POST['category_name']);
         $admin_id = sanitizeInput($_POST['admin_id']);
 
+        if($db->getCategoryByName($category_name)){
+            $_SESSION['status'] = "Category Already Existing";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=appliances");
+            exit();
+        }
+
         $insertCategory = $db->insertCategory($admin_id, $category_name);
 
         if ($insertCategory) {
@@ -546,6 +553,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updateAdminInfo'])) {
         $Category_name = sanitizeInput($_POST['Category_name']);
         $subject_code = sanitizeInput($_POST['subject_code']);
 
+        if($db->getCategoryByName($Category_name)){
+            $_SESSION['status'] = "Category Already Existing";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=appliances");
+            exit(); 
+        }
+        
         $updateCategory = $db->updateCategory($Category_name, $category_id);
 
         if ($updateCategory) {
@@ -697,7 +711,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updateAdminInfo'])) {
         
         $admin_id = sanitizeInput($_POST['admin_id']);
         $full_name = sanitizeInput($_POST['full_name']);
-        $complete_address = sanitizeInput($_POST['complete_address']);
+        // $complete_address = sanitizeInput($_POST['complete_address']);
+        $complete_address = "";
         $municipality = sanitizeInput($_POST['municipality']);
         $barangay = sanitizeInput($_POST['barangay']);
         $street_name = sanitizeInput($_POST['street_name']);
@@ -1335,6 +1350,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Add_Discounts'])) {
     $end_date = sanitizeInput($_POST['end_date']);
     $terms = sanitizeInput($_POST['terms']);
 
+    if($db->getDiscountByName($name)) {
+        $_SESSION['status'] = "Discount/Promotion already exists";
+        $_SESSION['status-code'] = "error";
+        header("location: route.php?route=discount_promotions");
+        exit();
+    }
+
     $insertDiscount_Promotions = $db->insertDiscount_Promotions($admin_id, $name, $type_of_discount, $payment_type, $cash_discount_percentage, $downpayment_percentage, $interest_percentage, $eligible, $start_date, $end_date, $terms);
 
     if ($insertDiscount_Promotions) {
@@ -1414,7 +1436,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
         try {
             // $admin_id = sanitizeInput($_POST['admin_id']);
             $full_name = sanitizeInput($_POST['full_name']);
-            $complete_address = sanitizeInput($_POST['complete_address']);
+            $complete_address = "";
             $municipality = sanitizeInput($_POST['municipality']);
             $barangay = sanitizeInput($_POST['barangay']);
             $street_name = sanitizeInput($_POST['street_name']);
@@ -1467,6 +1489,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
         $brand_name = sanitizeInput($_POST['brand_name']);
         $admin_id = sanitizeInput($_POST['admin_id']);
 
+        if($db->getBrandByName($brand_name)) {
+            $_SESSION['status'] = "Brand already exists";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=appliances");
+            exit();
+        }
+
         $insertBrand = $db->insertBrand($admin_id, $brand_name);
 
         if ($insertBrand) {
@@ -1491,6 +1520,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
 
         $brand_id = sanitizeInput($_POST['brand_id']);
         $brand_name = sanitizeInput($_POST['brand_name']);
+
+        if($db->getBrandByName($brand_name)) {
+            $_SESSION['status'] = "Brand already exists";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=appliances");
+            exit();    
+        }
 
         $updateBrand = $db->updateBrand($brand_name, $brand_id);
 

@@ -1351,6 +1351,39 @@ public function uploadImage($admin_id, $filename) {
     return $result;
 }
 
+public function getCategoryByName($category_name) { 
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM category WHERE cat_name = ?");
+    $stmt->execute([$category_name]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function getBrandByName($brand_name) { 
+    $connection = $this->getConnection();    
+
+    $stmt = $connection->prepare("SELECT * FROM brands WHERE brand_name = ?");
+    $stmt->execute([$brand_name]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function getDiscountByName($discount_name) { 
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM discount_promotion WHERE name = ?");
+    $stmt->execute([$discount_name]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
 }
 
 ?>

@@ -49,10 +49,10 @@ $barangays = $db->getBarangays();
                         <input type="text" name="full_name" id="fullName" class="form-control" placeholder="Enter Customer Full Name" required>
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="addrss">Complete Address</label>
                         <input type="text" name="complete_address" id="addrss" class="form-control" placeholder="Enter Complete Address" required>
-                    </div>
+                    </div> -->
 
                     <div class="form-group">
                         <label for="addrss">Municipality</label>

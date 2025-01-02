@@ -77,10 +77,10 @@ require_once 'templates/admin_header.php';
                                           <input type="text" name="full_name" id="fullName" class="form-control" placeholder="Enter Customer Full Name" required>
                                         </div>
 
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                           <label for="addrss">Complete Address</label>
                                           <input type="text" name="complete_address" id="addrss" class="form-control" placeholder="Enter Complete Address" required>
-                                        </div>
+                                        </div> -->
 
                                         <div class="form-group">
                                             <label for="addrss">Municipality</label>
@@ -382,7 +382,7 @@ require_once 'templates/admin_header.php';
                                             <th>No. of Ongoing Credit Customer</th>
                                             <th>Full Name</th>
                                             <th>Credit Limit</th>
-                                            <th>Complete Address</th>
+                                            <!-- <th>Complete Address</th> -->
                                             <th>Municipality</th>
                                             <th>Barangay</th>
                                             <th>Street Name</th>
@@ -405,7 +405,7 @@ require_once 'templates/admin_header.php';
                                             <td><?=$result['id']?></td>
                                             <td><?=$result['full_name']?></td>
                                             <td class="<?= $result['credit_limit'] <= 0 ? 'text-danger' : '' ?>" >PHP <?= number_format($result['credit_limit'], 2) ?></td>
-                                            <td><?=$result['complete_address']?></td>
+                                            <!-- <td><?=$result['complete_address']?></td> -->
                                             <td><?=$result['municipality']?></td>
                                             <td><?=$result['barangay']?></td>
                                             <td><?=$result['street_name']?></td>
