@@ -526,6 +526,8 @@ $status = 'FULLY PAID';
 // Fetch data from the database
 $paymentCounts = $db->selectAllSales_WHERE_APPLIANCES($status);
 
+
+
 // Initialize arrays for appliances and prices
 $applianceNames = [];
 $totalPrices = [];
@@ -533,13 +535,17 @@ $totalPrices = [];
 // Validate and populate arrays
 if (!empty($paymentCounts)) {
     foreach ($paymentCounts as $row) {
-        $applianceName = !empty($row['appliances_name']) ? $row['appliances_name'] : 'Appliances';
-        $totalPrice = !empty($row['total_price']) ? $row['total_price'] : 0;
-
+        // $applianceName = !empty($row['appliances_name']) ? $row['appliances_name'] : 'Appliances';
+        // $totalPrice = !empty($row['total_price']) ? $row['total_price'] : 0;
+        $applianceName =  $row['appliances_name'];
+        $totalPrice = $row['total_price'];
+        // echo json_encode($applianceNames);
         $applianceNames[] = $applianceName;
         $totalPrices[] = $totalPrice;
     }
 }
+
+// echo json_encode($applianceNames);
 
 // Fallback for empty data
 if (empty($applianceNames)) {
@@ -559,6 +565,8 @@ $totalPricesJson = json_encode($totalPrices);
     // Parse PHP data into JavaScript
     var applianceNames = <?php echo $applianceNamesJson; ?>;
     var totalPrices = <?php echo $totalPricesJson; ?>;
+
+    console.log(applianceNames);
 
     // Filter out any null or undefined values (just in case)
     applianceNames = applianceNames.filter(name => name !== null && name !== undefined);

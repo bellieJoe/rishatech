@@ -53,7 +53,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Credit Limit</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">PHP <?php echo number_format($_SESSION['user']['credit_limit'], 2); ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">PHP <?php echo number_format($_SESSION['user']['credit_limit'] ?? 0, 2); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-credit-card fa-2x text-gray-300"></i>
@@ -75,7 +75,7 @@
                                             <?php
                                                 
                                             ?>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">PHP <?php echo number_format($totalSpent, 2); ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">PHP <?php echo number_format($totalSpent ?? 0, 2); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-money-bill-alt fa-2x text-gray-300"></i>
@@ -96,7 +96,7 @@
                                             <?php
                                                 
                                             ?>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">PHP <?php echo number_format($totalCreditPayments, 2); ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">PHP <?php echo number_format($totalCreditPayments ?? 0, 2); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-money-bill-alt fa-2x text-gray-300"></i>
@@ -117,7 +117,7 @@
                                             <?php
                                                 
                                             ?>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">PHP <?php echo number_format($totalCashPayments, 2); ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">PHP <?php echo number_format($totalCashPayments ?? 0, 2); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-money-bill-alt fa-2x text-gray-300"></i>
@@ -154,7 +154,7 @@
                                                 <tr>
                                                     <td><?php echo date('M d, Y', strtotime($row['date_created'])); ?></td>
                                                     <td><?=$row['appliances_name']?></td>
-                                                    <td>PHP <?php echo number_format($row['total_sales'], 2); ?></td>
+                                                    <td>PHP <?php echo number_format($row['total_sales'] ?? 0, 2); ?></td>
                                                     <td><?php echo $row['payment_type']; ?></td>
                                                 </tr>
                                                 <?php

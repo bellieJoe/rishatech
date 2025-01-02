@@ -305,7 +305,7 @@ require_once 'templates/admin_header.php';
                                             <td><?=$result['brand_name']?></td>
                                             <td>₱ <?=$result['price']?></td>
                                             <td><?=$result['qty']?> <?=$result['unit_measurement']?></td>
-                                            <td><?=$result['status']?></td>
+                                            <td><?=$result['qty'] > 0 ? "Available" : "Not Available"?></td>
                                             <td>
                                                 <!-- Button trigger modal -->
                                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalEdit_<?=$result['AppliancesID']?>">
