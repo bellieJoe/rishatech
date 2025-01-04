@@ -3,8 +3,10 @@
 
    include_once '../app/config/constants.php';
    include_once '../db_connection/config.php';
+   include_once '../paymongo.php';
 
    $db = new Database();
+   $paymongo = new PayMongo();
 
    if(!isset($_SESSION['user'])) {
        header("Location: ".BASE_URL."/client/index.php");
@@ -90,6 +92,7 @@
                                                                                 <th>Date Paid</th>
                                                                                 <th>Amount Paid</th>
                                                                                 <th>Status</th>
+                                                                                <th>Action</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -104,6 +107,29 @@
                                                                                 <td><?php echo $payment['date_paid'] == null ? "-" : date("M d, Y", strtotime($payment['date_paid']));?></td>
                                                                                 <td>PHP <?php echo number_format($payment['amount_paid'], 2);?></td>
                                                                                 <td><?php echo $payment['payment_status'];?></td>
+                                                                                <td>
+                                                                                    <?php
+                                                                                    
+                                                                                    if ($payment['amount_paid'] < $row['monthly_payment']) {
+                                                                                        // Compute the payable amount
+                                                                                        $to_pay =  $paymongo->computeAmount($row['monthly_payment'], $payment['payment_date']) - $payment['amount_paid'];
+                                                                                        
+                                                                                        // Generate the payment URL
+                                                                                        $link = $paymongo->generateUrl($to_pay, $payment['id']);
+                                                                                        
+                                                                                        // Check if $link is not null and contains the expected properties
+                                                                                        if ($link && isset($link->data->attributes->redirect->checkout_url)) {
+                                                                                            // echo json_encode($link);
+                                                                                            ?>
+                                                                                                <a href="<?php echo $link->data->attributes->redirect->checkout_url; ?>" target="_blank" class="btn btn-sm btn-primary" >Pay</a>
+                                                                                            <?php
+                                                                                        } else {
+                                                                                            // Handle the case where the URL was not generated properly
+                                                                                            echo "Error: Unable to generate payment URL.";
+                                                                                        }
+                                                                                    }
+                                                                                    ?>
+                                                                                </td>
                                                                             </tr>
                                                                             <?php
                                                                                 }
