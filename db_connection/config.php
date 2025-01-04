@@ -1386,6 +1386,78 @@ public function getDiscountByName($discount_name) {
     return $result;
 }
 
+public function getCustomerByEmail($email) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM customers WHERE email = ?");
+    $stmt->execute([$email]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function setUserResetToken($id, $token) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE users SET reset_token = ? WHERE id = ?");
+    $result = $stmt->execute([$token, $id]);
+
+    return $result;
+}
+
+public function getUserById($id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM users WHERE id = ?");
+    $stmt->execute([$id]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function updatePassword($id, $password) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE users SET password = ? WHERE id = ?");
+    $result = $stmt->execute([$password, $id]);
+
+    return $result;
+}
+
+public function addUserAccount($username, $password) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("INSERT INTO users(username, password, active) VALUES (?, ?, 1)");
+    $result = $stmt->execute([$username, $password]);
+
+     $lastInsertId = $connection->lastInsertId();
+     return $lastInsertId;
+    
+}
+
+public function updateCustomerUserId($id, $user_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE customers SET user_id = ? WHERE id = ?");
+    $result = $stmt->execute([$user_id, $id]);
+
+    return $result;
+
+}
+
+public function getApplianceByNameAndBrandId($name, $category_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM appliances WHERE appliances_name = ? AND brand_id = ?");
+    $stmt->execute([$name, $category_id]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
 }
 
 

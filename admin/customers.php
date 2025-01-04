@@ -483,8 +483,55 @@ require_once 'templates/admin_header.php';
                                                         <?php
                                                             }
                                                         ?>
+                                                        <?php
+                                                            if($result["user_id"] == null){
+                                                        ?>
+                                                            <a class="dropdown-item" data-toggle="modal" data-target="#ModalAddUser_<?=$result['id']?>"><i class="fa fa-user mr-2"></i>Add User</a>
+                                                        <?php   
+                                                            }
+                                                        ?>
                                                     </div>
                                                 </div>
+
+                                                <?php
+                                                    if($result["user_id"] == null){
+                                                ?>
+                                                    <div class="modal fade" id="ModalAddUser_<?=$result['id']?>">
+                                                        <div class="modal-dialog">
+                                                            <form class="modal-content" action="./forms_code.php" method="POST">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Add User</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <input type="hidden" name="customer_id" value="<?=$result['id']?>">
+                                                                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                                                    <div class="form-group">
+                                                                        <label for="name">Name</label>
+                                                                        <input type="text" class="form-control" name="name" value="<?=$result['full_name']?>" readonly>
+                                                                    </div>
+                                                                    
+                                                                    <div class="form-group">
+                                                                        <label for="username">Username</label>
+                                                                        <input type="text" class="form-control" name="username" required>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="password">Password</label>
+                                                                        <input type="password" class="form-control" name="password" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary" name="AddUserAccount">Save</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                <?php   
+                                                    }
+                                                ?>
 
                                                 <?php
                                                     $customer_id = sanitizeInput($result['id']);
@@ -618,6 +665,8 @@ require_once 'templates/admin_header.php';
                                                 <?php
                                                     }
                                                 ?>
+
+                                             
                                                 
                                                 <!-- Modal -->
                                                 <div class="modal fade" id="ModalEdit_<?=$result['id']?>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">

@@ -15,6 +15,7 @@ if(isset($_SESSION['user'])) {
 <html lang="en">
 
 <?php require_once 'components/head.php'; ?>
+<?php require_once './templates/client_header.php'; ?>
 
 <body>
 
@@ -25,35 +26,26 @@ if(isset($_SESSION['user'])) {
     <!-- Login Section -->
     <section class="login-section bg-light py-5 h-100 ">
         <div class="container ">
-            <?php include './components/error-alert.php'; ?>
+       
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <div class="text-center">
                         <h3 class="mb-3 font-weight-bold text-primary">Welcome Back Client!</h3>
                         <p class="lead">Access your account to manage your sales and credits.</p>
                         <p class="lead mb-4">Don't have an account? <a href="./registration.php">Register</a></p>
-                        
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
-                            <h2 class="text-center mb-4">Login</h2>
+                            <h2 class="text-center mb-4">Reset Password</h2>
                             <form action="../app/formController.php" method="POST">
                                 
                                 <div class="form-group">
-                                    <label for="email">Username</label>
-                                    <input type="text" class="form-control" id="username" name="username" required>
+                                    <label for="email">Email</label>
+                                    <input type="text" class="form-control" id="email" name="email" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
-                                </div>
-                                <button name="ClientLogin" type="submit" class="btn btn-primary btn-block">Login</button>
-                                <div class="text-center">
-                                    <a href="./forgot-password.php">Forgot Password?</a>
-                                </div>
-                                <br>
+                                <button name="ForgotPassword" type="submit" class="btn btn-primary btn-block">Send Password Reset</button>
                             </form>
                         </div>
                     </div>
@@ -64,7 +56,6 @@ if(isset($_SESSION['user'])) {
 </div>
 
     
-</body>
 <!-- scripts -->
 <script src="../admin/vendor/jquery/jquery.min.js"></script>
 <script src="../admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -72,6 +63,23 @@ if(isset($_SESSION['user'])) {
 <script src="../admin/js/sb-admin-2.min.js"></script>
 <script src="../admin/vendor/chart.js/Chart.min.js"></script>
 <script src="../admin/js/sweetalert.js"></script>
+
+
+<?php 
+if (isset($_SESSION['message']) && $_SESSION['message']['message'] != '') {
+?>
+<script>
+    swal({
+        title: "<?php echo $_SESSION['message']['message']; ?>",
+        icon: "<?php echo $_SESSION['message']['status']; ?>",
+        button: "DONE",
+    });
+</script>
+<?php
+    unset($_SESSION['message']);
+}
+?>
+</body>
 
 </html>
 

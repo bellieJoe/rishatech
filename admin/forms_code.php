@@ -621,6 +621,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updateAdminInfo'])) {
         $unit_measurement = sanitizeInput($_POST['unit_measurement']);
         // echo $brand." ".$category;
         // exit();
+
+        if($db->getApplianceByNameAndBrandId($appliance_name, $brand)){
+            $_SESSION['status'] = "Appliance Already Existing";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=appliances");
+            exit();
+        }
+
         $insertAppliances = $db->insertAppliances($admin_id, $appliance_name, $category, $brand, $price, $quantity, $unit_measurement, $status);
 
         if ($insertAppliances) {
@@ -1635,6 +1643,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete_Discount'])) {
             }
     
         }  
+    }
+
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['AddUserAccount'])) {   
+
+        $username = sanitizeInput($_POST['username']);
+        $password = sanitizeInput($_POST['password']);
+        $customer_id = sanitizeInput($_POST['customer_id']);
+        
+        $insertUserAccount = $db->addUserAccount($username, password_hash($password, PASSWORD_DEFAULT));
+    
+        if ($insertUserAccount) {
+            if(!$db->updateCustomerUserId($customer_id, $insertUserAccount)){
+                $_SESSION['status'] = "ERROR! Failed to add User Account. Try Again.";
+                $_SESSION['status-code'] = "error";
+                header("location: route.php?route=customers");
+                exit();
+            }
+            $_SESSION['status'] = "User Account Added";
+            $_SESSION['status-code'] = "success";
+            header("location: route.php?route=customers");
+            exit();
+        } else {
+            $_SESSION['status'] = "ERROR! Failed to add User Account. Try Again.";
+            $_SESSION['status-code'] = "error";
+            header("location: route.php?route=customers");
+            exit();
+        }
     }
 
 

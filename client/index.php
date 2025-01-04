@@ -60,5 +60,31 @@
         </div>
     </section>
 </body>
+
+<!-- scripts -->
+<script src="../admin/vendor/jquery/jquery.min.js"></script>
+<script src="../admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="../admin/js/sb-admin-2.min.js"></script>
+<script src="../admin/vendor/chart.js/Chart.min.js"></script>
+<script src="../admin/js/sweetalert.js"></script>
+
+
+<?php 
+if (isset($_SESSION['message']) && $_SESSION['message']['message'] != '') {
+?>
+<script>
+    swal({
+        title: "<?php echo $_SESSION['message']['message']; ?>",
+        icon: "<?php echo $_SESSION['message']['status']; ?>",
+        button: "DONE",
+    });
+</script>
+<?php
+    unset($_SESSION['message']);
+}
+?>
 </html>
+
+
 
