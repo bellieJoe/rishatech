@@ -100,7 +100,7 @@
         <div id="collapse5" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="financial_reports.php?route=financial_reports">
-                    <span>Reports</span>
+                    <span>Financial Reports</span>
                 </a>
                 <a class="collapse-item" href="customers_list_report.php">
                     <span>Customers List</span>

@@ -409,6 +409,7 @@ require_once 'templates/admin_header.php';
             
             // Handle Cash Payment type
             if (paymentType === 'Cash') {
+                $Discount.append(`<option value="No Discount">No Promotion or Discount Applied</option>`);
                 discounts.filter(discount => ['Cash', 'Both'].includes(discount.payment_type)).forEach(discount => {
                     $Discount.append(`<option value="${discount.id}">${discount.name}</option>`);
                 });
@@ -455,9 +456,12 @@ require_once 'templates/admin_header.php';
             const price = ($Qty.val() * selectedAppliance.data('price'));
             var cash_discount_percentage = 0;
 
-            if($PaymentType.val() === 'Cash' && $Discount.val() ) {
+            // console.log(discounts)
+            if($PaymentType.val() === 'Cash' && $Discount.val()) {
                 cash_discount_percentage = discounts.find(discount => discount.id === $Discount.val()).cash_discount_percentage;
+                console.log("cash_discount_percentage", discounts.find(discount => discount.id === $Discount.val()));
             }
+
 
             if($PaymentType.val() === 'Credit' ) {
                 var interest = 0.03;
@@ -472,11 +476,13 @@ require_once 'templates/admin_header.php';
                 else if(!["No Downpayment", "", null].includes($Discount.val())) {
                     var discount = discounts.find(discount => discount.id === $Discount.val());  
                     interest = discount.interest_percentage;
-                    return price + ((price - calculateDownPayment()) * interest);
+                    cash_discount_percentage = discount.cash_discount_percentage;
+                    return (price - (price * cash_discount_percentage)) + ((price - calculateDownPayment()) * interest);
                 }
                 return price + ((price - calculateDownPayment()) * interest);
             }
-
+            // const _price = price - calculateDownPayment();
+            // return _price
             return price - (price * cash_discount_percentage);
         }
 

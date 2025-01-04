@@ -141,6 +141,7 @@
                     <tbody>
                         <?php
                             $index = 0;
+                            $balance = $sales['total_sales'] - $sales['downpayment'];
                             foreach($payments as $payment) {
                                 $index++;
                         ?>
@@ -151,12 +152,15 @@
                             <td><?= $payment['date_paid'] == null ? "-" : date("M d, Y", strtotime($payment['date_paid'])) ?></td>
                             <td><?= "PHP " . number_format($payment['amount_paid'], 2) ?></td>
                             <td><?= $payment['amount_paid'] == 0 ? "-" : "PHP " . number_format(($payment['amount_paid'] - $sales['monthly_payment']), 2) ?></td>
-                            <td><?= 
-                                   $payment['amount_paid'] > $sales['monthly_payment'] ? "PHP 0.00" : "PHP " . number_format($sales['monthly_payment'] - $payment['amount_paid'], 2) ?>
+                            <td><?= "PHP " . number_format(($balance), 2) ?>
                             </td>
+                            <!-- <td><?= 
+                                   $payment['amount_paid'] > $sales['monthly_payment'] ? "PHP 0.00" : "PHP " . number_format($sales['monthly_payment'] - $payment['amount_paid'], 2) ?>
+                            </td> -->
                         </tr>
 
                         <?php
+                                $balance = $balance - $sales['monthly_payment'];
                             }
                         ?>
                     </tbody>

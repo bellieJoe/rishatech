@@ -189,6 +189,9 @@ require_once 'templates/admin_header.php';
                                                                         <select class="form-control" name="due_date" id="due_date_<?=$key['Sales_Id']?>" required>
                                                                             <option disabled selected>--- SELECT DUE DATE ---</option>
                                                                             <?php
+                                                                            usort($credits, function ($a, $b) {
+                                                                                return strtotime($a['payment_date']) - strtotime($b['payment_date']);
+                                                                            });
                                                                             foreach ($credits as $credit) {
                                                                                 echo '<option value="' . $credit['payment_date'] . '">' . date('F j, Y', strtotime($credit['payment_date'])) . '</option>';
                                                                             }
