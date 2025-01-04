@@ -532,6 +532,8 @@ $paymentCounts = $db->selectAllSales_WHERE_APPLIANCES($status);
 $applianceNames = [];
 $totalPrices = [];
 
+echo json_encode($totalPrices);
+
 // Validate and populate arrays
 if (!empty($paymentCounts)) {
     foreach ($paymentCounts as $row) {

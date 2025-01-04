@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RISHATECH CLIENT</title>
-    <link rel="stylesheet" href="../admin/css/sb-admin-2.min.css">
+    <title>RISHATECH ADMIN</title>
+    <link rel="stylesheet" href="./css/sb-admin-2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8rsqVujOnsKL8vU9s2ryJC2EPnm7EY2pb3hlh+Z5Q5i6fM41QI94ukzU+Ue++tCSDzhxu0DWFL4xVZLQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
@@ -13,7 +13,7 @@
         }
         .hero {
             /* background-image: url("https://source.unsplash.com/1600x900/?nature,landscape"); */
-            background-image: url("../admin/img/bg.jpg");
+            background-image: url("./img/bg.jpg");
             background-size: cover;
             background-position: center;
             height: 100vh;
@@ -50,11 +50,13 @@
     <section class="hero">
         <div class="container">
             <div style="text-align: left;">
-                <h1 class="display-1" style="color: #333;">RishaTech Client</h1>
-                <p class="lead" style="color: #333;">Track and Manage Your Credits</p>
+                <h1 class="display-1" style="color: #333;">RishaTech Admin</h1>
+                <p class="lead" style="color: #333;">
+                    Manage Sales and Credit easily. Keep track of all transactions in one place.
+                   
+                </p>
                 <div >
-                    <a href="signin.php" class="btn btn-primary">Login</a>
-                    <a href="registration.php" class="btn btn-success">Sign Up</a>
+                    <a href="?route=home" class="btn btn-primary">Login</a>
                 </div>
             </div>
         </div>

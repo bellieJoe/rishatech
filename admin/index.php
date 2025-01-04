@@ -19,6 +19,9 @@ if (isset($_GET['route'])) {
     } else if ($route == 'forgotpword') {
         include ("forgot-password.php");
         exit();
+    } else if ($route == 'index') {
+        include ("landing.php");
+        exit();
     } else if ($route == 'verifyotpadmin') {
         include ("verify_otp_admin_account.php");
         exit();
@@ -32,7 +35,7 @@ if (isset($_GET['route'])) {
         session_unset();
         session_destroy();
 
-        header('Location: ./index.php?route=home');
+        header('Location: ./index.php?route=index');
         exit();
     }
 
@@ -40,7 +43,7 @@ if (isset($_GET['route'])) {
     session_unset();
     session_destroy();
 
-    header('Location: ./index.php?route=home');
+    header('Location: ./index.php?route=index');
     exit();
 }
 

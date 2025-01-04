@@ -9,27 +9,50 @@
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: 'Nunito', sans-serif;
         }
-        .container {
-            max-width: 500px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+        .hero {
+            /* background-image: url("https://source.unsplash.com/1600x900/?nature,landscape"); */
+            background-image: url("./admin/img/bg.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+        .hero button {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            margin-top: 25px;
+        }
+        .hero button:hover {
+            background-color: #0056b3;
+            border-color: #004085;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="text-center">
-            <img src="./admin/img/bg.png" alt="" class="img-fluid mx-auto d-block rounded-circle" style="height: 300px; object-fit: cover; object-position: center;">
-            <h1 class="display-5 font-weight-bold">A-Risha General Merchandise</h1>
-            <p class="lead">Sales and Credit Management</p>
+    <section class="hero">
+        <div class="container">
+            <h1 class="display-1" style="color: #333;">A-Risha General Merchandise</h1>
+            <p class="lead" style="color: #333;">Easy and Efficient Sales and Credit Management</p>
         </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="./admin/js/sb-admin-2.min.js"></script>
+    </section>
 </body>
 </html>
 
