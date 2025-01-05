@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['viewkey']) && isset($_GE
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>ID No.#</th>
+                                            <!-- <th>ID No.#</th> -->
                                             <th>Valid ID</th>
                                             <th>2 by 2 Picture</th>
                                             <th>Brgy Clearance</th>
@@ -69,13 +69,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['viewkey']) && isset($_GE
                                         if ($result !== false) {
                                     ?>
                                             <tr>
-                                                <td><?= $result['id'] ?></td>
+                                                <!-- <td><?= $result['id'] ?></td> -->
                                                 <td><img src="<?= $result['valid_id'] ?>" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="Valid ID"></td>
-                                                <td><img src="<?= $result['twoBytwo_pic'] ?>" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="2 By 2 ID Picture"></td>
-                                                <td><a href="<?= $result['brgy_clearance'] ?>" target="_blank" class="btn btn-link">Brgy Clearance.pdf</a></td>
-                                                <td><a href="<?= $result['cedula'] ?>" target="_blank" class="btn btn-link">Cedula.pdf</a></td>
-                                                <td><a href="<?= $result['proof_of_billing'] ?>" target="_blank" class="btn btn-link">Proof of Billing.pdf</a></td>
-                                                <td><a href="<?= $result['application_form_credit'] ?>" target="_blank" class="btn btn-link">Application for Credit.pdf</a></td>
+                                                <td>
+                                                    <img src="<?= $result['twoBytwo_pic'] ?>" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="2 By 2 ID Picture">
+                                                </td>
+                                                <td><a href="<?= $result['brgy_clearance'] ?>" target="_blank" class="btn btn-link"><?= $result['brgy_clearance'] ? "Brgy Clearance.pdf" : "Not Yet Uploaded" ?></a></td>
+                                                <td><a href="<?= $result['cedula'] ?>" target="_blank" class="btn btn-link" ><?= $result['cedula'] ? "Cedula.pdf" : "Not Yet Uploaded" ?></a></td>
+                                                <td><a href="<?= $result['proof_of_billing'] ?>" target="_blank" class="btn btn-link"><?= $result['proof_of_billing'] ? "Proof Of Billing.pdf" : "Not Yet Uploaded" ?></a></td>
+                                                <td><a href="<?= $result['application_form_credit'] ?>" target="_blank" class="btn btn-link" ><?= $result['application_form_credit'] ? "Application For Credit.pdf" : "Not Yet Uploaded" ?></a></td>
                                                 <td>
                                                     <!-- Edit Button trigger modal -->
                                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit_<?= $result['id'] ?>">Edit</button>
@@ -102,27 +104,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['viewkey']) && isset($_GE
                                                                         <!-- Form fields for editing files -->
                                                                         <div class="form-group">
                                                                             <label for="valid_id">Valid ID</label>
-                                                                            <input type="file" name="valid_id" class="form-control">
+                                                                            <input type="file" accept="image/*" name="valid_id" class="form-control">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="twoBytwo_pic">2 by 2 Picture</label>
-                                                                            <input type="file" name="twoBytwo_pic" class="form-control">
+                                                                            <input type="file" accept="image/*" name="twoBytwo_pic" class="form-control">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="brgy_clearance">Brgy Clearance</label>
-                                                                            <input type="file" name="brgy_clearance" class="form-control">
+                                                                            <input type="file" accept=".pdf" name="brgy_clearance" class="form-control">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="cedula">Cedula</label>
-                                                                            <input type="file" name="cedula" class="form-control">
+                                                                            <input type="file" accept=".pdf" name="cedula" class="form-control">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="proof_of_billing">Proof Of Billing</label>
-                                                                            <input type="file" name="proof_of_billing" class="form-control">
+                                                                            <input type="file" accept=".pdf" name="proof_of_billing" class="form-control">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="application_form_credit">Application For Credit</label>
-                                                                            <input type="file" name="application_form_credit" class="form-control">
+                                                                            <input type="file" accept=".pdf" name="application_form_credit" class="form-control">
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">

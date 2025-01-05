@@ -923,6 +923,102 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updateAdminInfo'])) {
     
     }
 
+    //-------------------------------------------------------------------------------------------------------UPLOAD FILES
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_requirements'])) {
+
+        $customer_id = sanitizeInput($_POST['customer_id']);
+
+        $admin_id = sanitizeInput($_POST['admin_id']);
+
+        // Check if a file is uploaded for form_137
+        if (isset($_FILES['valid_id']) && $_FILES['valid_id']['error'] === UPLOAD_ERR_OK) {
+            $valid_id_file_name = uniqid() . '-' . $_FILES['valid_id']['name'];
+            $valid_id_file_tmp = $_FILES['valid_id']['tmp_name'];
+            $valid_id_upload_dir = "uploads/";
+            $valid_id_upload_path = $valid_id_upload_dir . $valid_id_file_name;
+    
+            move_uploaded_file($valid_id_file_tmp, $valid_id_upload_path);
+            $db->updateValidId($customer_id, $valid_id_upload_path);
+        } else {
+            $valid_id_upload_path = ''; // Save empty if no file is uploaded
+        }
+    
+        
+        if (isset($_FILES['twoBytwo_pic']) && $_FILES['twoBytwo_pic']['error'] === UPLOAD_ERR_OK) {
+            $twoby2_pic_file_name = uniqid() . '-' . $_FILES['twoBytwo_pic']['name'];
+            $twoby2_pic_file_tmp = $_FILES['twoBytwo_pic']['tmp_name'];
+            $twoby2_pic_upload_dir = "uploads/";
+            $twoby2_pic_upload_path = $twoby2_pic_upload_dir . $twoby2_pic_file_name;
+    
+            move_uploaded_file($twoby2_pic_file_tmp, $twoby2_pic_upload_path);
+            $db->updateTwoByTwoPic($customer_id, $twoby2_pic_upload_path);
+        } else {
+            $twoby2_pic_upload_path = ''; // Save empty if no file is uploaded
+        }
+    
+    
+        if (isset($_FILES['brgy_clearance']) && $_FILES['brgy_clearance']['error'] === UPLOAD_ERR_OK) {
+            $brgy_clearance_file_name = uniqid() . '-' . $_FILES['brgy_clearance']['name'];
+            $brgy_clearance_file_tmp = $_FILES['brgy_clearance']['tmp_name'];
+            $brgy_clearance_upload_dir = "uploads/";
+            $brgy_clearance_upload_path = $brgy_clearance_upload_dir . $brgy_clearance_file_name;
+    
+            move_uploaded_file($brgy_clearance_file_tmp, $brgy_clearance_upload_path);
+            $db->updateBrgyClearance($customer_id, $brgy_clearance_upload_path);
+            
+        } else {
+            $brgy_clearance_upload_path = ''; // Save empty if no file is uploaded
+        }
+
+        if (isset($_FILES['cedula']) && $_FILES['cedula']['error'] === UPLOAD_ERR_OK) {
+            $cedula_file_name = uniqid() . '-' . $_FILES['cedula']['name'];
+            $cedula_file_tmp = $_FILES['cedula']['tmp_name'];
+            $cedula_upload_dir = "uploads/";
+            $cedula_upload_path = $cedula_upload_dir . $cedula_file_name;
+    
+            move_uploaded_file($cedula_file_tmp, $cedula_upload_path);
+            $db->updateCedula($customer_id, $cedula_upload_path);
+        } else {
+            $cedula_upload_path = ''; // Save empty if no file is uploaded
+        }
+
+        if (isset($_FILES['proof_of_billing']) && $_FILES['proof_of_billing']['error'] === UPLOAD_ERR_OK) {
+            $proof_of_billing_file_name = uniqid() . '-' . $_FILES['proof_of_billing']['name'];
+            $proof_of_billing_file_tmp = $_FILES['proof_of_billing']['tmp_name'];
+            $proof_of_billing_upload_dir = "uploads/";
+            $proof_of_billing_upload_path = $proof_of_billing_upload_dir . $proof_of_billing_file_name;
+    
+            move_uploaded_file($proof_of_billing_file_tmp, $proof_of_billing_upload_path);
+            $db->updateProofOfBilling($customer_id, $proof_of_billing_upload_path);
+        } else {
+            $proof_of_billing_upload_path = ''; // Save empty if no file is uploaded
+        }
+
+        if (isset($_FILES['application_form_credit']) && $_FILES['application_form_credit']['error'] === UPLOAD_ERR_OK) {
+            $application_for_credit_file_name = uniqid() . '-' . $_FILES['application_form_credit']['name'];
+            $application_for_credit_file_tmp = $_FILES['application_form_credit']['tmp_name'];
+            $application_for_credit_upload_dir = "uploads/";
+            $application_for_credit_upload_path = $application_for_credit_upload_dir . $application_for_credit_file_name;
+    
+            move_uploaded_file($application_for_credit_file_tmp, $application_for_credit_upload_path);
+            $db->updateApplicationForCredit($customer_id, $application_for_credit_upload_path);
+        } else {
+            $application_for_credit_upload_path = ''; // Save empty if no file is uploaded
+        }
+    
+        // Save file paths to database
+        // $uploadFiles = $db->uploadFiles($customer_id, $admin_id, $valid_id_upload_path, $twoby2_pic_upload_path, $brgy_clearance_upload_path, $cedula_upload_path, $proof_of_billing_upload_path, $application_for_credit_upload_path);
+    
+        // if ($uploadFiles) {
+
+        // }
+        $_SESSION['status'] = "Requirements Uploaded Successfully";
+        $_SESSION['status-code'] = "success";
+        header("location: route.php?route=customers");
+        exit();
+    
+    }
+
 //--------------------------------------------------------------------------------------------------------------UPLOAD RECEIPTS
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_receipts'])) {   
 

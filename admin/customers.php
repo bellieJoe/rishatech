@@ -772,7 +772,7 @@ require_once 'templates/admin_header.php';
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
-                                                            <form action="forms_code.php" method="post" enctype="multipart/form-data" onsubmit="return checkFilesSelected()">
+                                                            <form action="forms_code.php" method="post" enctype="multipart/form-data" onsubmit="return checkFilesSelected(<? echo $result['id']; ?>)">
                                                                 <!-- Include CSRF token as a hidden input field -->
                                                                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                                                 <input type="hidden" name="customer_id" value="<?=$result['id']?>">
@@ -820,25 +820,28 @@ require_once 'templates/admin_header.php';
                                                 </div>
 
                                                 <!-- JavaScript to check if at least one file is selected -->
-                                                <script>
+                                                <!-- <script>
+                                                    
                                                     function checkFilesSelected() {
-                                                        const fileInputs = document.querySelectorAll('#ModalUploadReq_<?=$result['id']?> input[type="file"]');
-                                                        let fileSelected = false;
+                                                        const fileInputs = document.querySelectorAll('#ModalUploadReq_<?=$result["id"]?> input[type="file"]');
 
-                                                        fileInputs.forEach(input => {
-                                                            if (input.files.length > 0) {
-                                                                fileSelected = true;
-                                                            }
+                                                        // Log selected file inputs for debugging
+                                                        console.log("File inputs found:", fileInputs);
+
+                                                        // Check if any file is selected
+                                                        const isFileSelected = Array.from(fileInputs).some(input => {
+                                                            console.log(`Checking input ${input.name}:`, input.files.length); // Debugging
+                                                            return input.files.length > 0;
                                                         });
 
-                                                        if (!fileSelected) {
+                                                        if (!isFileSelected) {
                                                             alert("Please select at least one file to upload.");
                                                             return false;
                                                         }
-                                                        
+
                                                         return true;
                                                     }
-                                                </script>
+                                                </script> -->
 
 
 
@@ -991,5 +994,29 @@ require_once 'templates/admin_header.php';
     ?>
 
 </body>
+
+<!-- JavaScript to check if at least one file is selected -->
+<script>
+                                                    
+    function checkFilesSelected(id) {
+        const fileInputs = document.querySelectorAll(`#ModalUploadReq_${id} input[type="file"]`);
+
+        // Log selected file inputs for debugging
+        console.log("File inputs found:", fileInputs);
+
+        // Check if any file is selected
+        const isFileSelected = Array.from(fileInputs).some(input => {
+            console.log(`Checking input ${input.name}:`, input.files.length); // Debugging
+            return input.files.length > 0;
+        });
+
+        if (!isFileSelected) {
+            alert("Please select at least one file to upload.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
 
 </html>

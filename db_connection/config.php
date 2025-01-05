@@ -431,6 +431,62 @@ public function uploadFiles($customer_id, $admin_id, $valid_id_upload_path, $two
     return $result;
 }
 
+public function updateValidId($customer_id, $valid_id_upload_path) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE requirements SET valid_id = ? WHERE customer_id = ?");
+    $result = $stmt->execute([$valid_id_upload_path, $customer_id]);
+
+    return $result;
+}
+
+public function updateTwoByTwoPic($customer_id, $twoby2_pic_upload_path) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE requirements SET twoBytwo_pic = ? WHERE customer_id = ?");
+    $result = $stmt->execute([$twoby2_pic_upload_path, $customer_id]);
+
+    return $result;
+}
+
+public function updateBrgyClearance($customer_id, $brgy_clearance_upload_path) {
+    $connection = $this->getConnection();   
+
+    $stmt = $connection->prepare("UPDATE requirements SET brgy_clearance = ? WHERE customer_id = ?");
+    $result = $stmt->execute([$brgy_clearance_upload_path,$customer_id]);
+
+    return $result;
+}
+
+public function updateCedula($customer_id, $cedula_upload_path) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE requirements SET cedula = ? WHERE customer_id = ?");   
+    $result = $stmt->execute([$cedula_upload_path, $customer_id]);
+
+    return $result;
+}
+
+public function updateProofOfBilling($customer_id, $proof_of_billing_upload_path) {
+    $connection = $this->getConnection();   
+
+    $stmt = $connection->prepare("UPDATE requirements SET proof_of_billing = ? WHERE customer_id = ?");
+    $result = $stmt->execute([$proof_of_billing_upload_path, $customer_id]);
+
+    return $result;
+}
+
+public function updateApplicationForCredit($customer_id, $application_for_credit_upload_path) {
+    $connection = $this->getConnection();   
+
+    $stmt = $connection->prepare("UPDATE requirements SET application_form_credit = ? WHERE customer_id = ?");
+    $result = $stmt->execute([ $application_for_credit_upload_path, $customer_id]);
+
+    return $result;
+}
+
+
+
 
 //-------------------------------------------------------------------------------------------------------SELECT CUSTOMER REQUIREMENTS
 public function selectRequirements($customer_id) {
