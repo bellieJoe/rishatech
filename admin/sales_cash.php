@@ -186,7 +186,24 @@ require_once 'templates/admin_header.php';
                                             <td><?=$key['cat_name']?></td>
                                             <td><?=$key['sales_qty']?> <?=$key['unit_measurement']?></td>
                                             <td><?=$key['total_sales']?></td>
-                                            <td><?=$key['discount_promotion']?></td>
+                                            <!-- <td><?=$key['discount_promotion']?></td> -->
+                                            <td>
+                                                <?php
+                                                $discountPromotion = $key['discount_promotion'];
+
+                                                // Check if the discount promotion is numeric
+                                                if (is_numeric($discountPromotion)) {
+                                                    // Fetch the discount promotion details based on the ID
+                                                    $selectDiscount_WHEREid = $db->selectDiscount_WHEREid($discountPromotion);
+                                                    
+                                                    // Echo the name of the discount promotion
+                                                    echo htmlspecialchars($selectDiscount_WHEREid['name']);
+                                                } else {
+                                                    // If not numeric, echo the value directly
+                                                    echo htmlspecialchars($discountPromotion);
+                                                }
+                                                ?>
+                                            </td>
                                             <td><?=$key['payment_type']?></td>
                                             <td><?=$key['payment_method']?></td>
                                             <td><?=$key['transaction_number']?></td>
