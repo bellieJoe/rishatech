@@ -1201,8 +1201,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
                     $monthly_payment = $price_plus_interest / $months_to_pay; // Spread payment over months
                 } else if($discount == 'No Discount') {
 
-                    $downpayment = 0.25 * $total_price; // 25% downpayment
-                    $interest = 0.03 * ($total_price - $downpayment); // 3% interest on remaining amount
+                    $interest = 0.03 * ($total_price); // 3% interest on remaining amount
+                    $downpayment = 0.25 * ($total_price + $interest); // 25% downpayment
                     $price_plus_interest = $total_price + $interest;
                     $total_sales = $price_plus_interest; // Total sales with interest
                     $monthly_payment = ($price_plus_interest - $downpayment) / $months_to_pay; // Spread payment over months
@@ -1212,8 +1212,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
                     $selectDiscount_WHEREid = $db->selectDiscount_WHEREid($discount);
 
 
-                    $downpayment = $selectDiscount_WHEREid['downpayment_percentage'] * $total_price; // 25% downpayment
-                    $interest = $selectDiscount_WHEREid['interest_percentage'] * ($total_price - $downpayment); // 3% interest on remaining amount
+                    $interest = $selectDiscount_WHEREid['interest_percentage'] * ($total_price); // 3% interest on remaining amount
+                    $downpayment = $selectDiscount_WHEREid['downpayment_percentage'] * ($total_price + $interest); // 25% downpayment
                     $price_plus_interest = $total_price + $interest;
                     $total_sales = $price_plus_interest; // Total sales with interest
                     $monthly_payment = ($price_plus_interest - $downpayment) / $months_to_pay; // Spread payment over months

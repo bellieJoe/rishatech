@@ -458,26 +458,25 @@ require_once 'templates/admin_header.php';
 
             // console.log(discounts)
             if($PaymentType.val() === 'Cash' && $Discount.val()) {
-                cash_discount_percentage = discounts.find(discount => discount.id === $Discount.val()).cash_discount_percentage;
-                console.log("cash_discount_percentage", discounts.find(discount => discount.id === $Discount.val()));
+                cash_discount_percentage = parseFloat(discounts.find(discount => discount.id == $Discount.val()).cash_discount_percentage);
+                console.log("cash_discount_percentage", discounts.find(discount => discount.id == $Discount.val()));
             }
 
 
             if($PaymentType.val() === 'Credit' ) {
                 var interest = 0.03;
-
                 if($Discount.val() === 'No Discount') {
-                    return price + ((price - calculateDownPayment()) * interest);
+                    return price + ((price) * interest);
                 }
                 if($Discount.val() === 'No Interest') {
                     interest = 0;
-                    return price + ((price - calculateDownPayment()) * interest);
+                    return price + ((price) * interest);
                 }
                 else if(!["No Downpayment", "", null].includes($Discount.val())) {
-                    var discount = discounts.find(discount => discount.id === $Discount.val());  
+                    var discount = discounts.find(discount => discount.id == $Discount.val());  
                     interest = discount.interest_percentage;
                     cash_discount_percentage = discount.cash_discount_percentage;
-                    return (price - (price * cash_discount_percentage)) + ((price - calculateDownPayment()) * interest);
+                    return (price - (price * cash_discount_percentage)) + ((price) * interest);
                 }
                 return price + ((price - calculateDownPayment()) * interest);
             }
@@ -490,13 +489,13 @@ require_once 'templates/admin_header.php';
         function calculateDownPayment() {
             const selectedAppliance = $Appliances.find(':selected');
             const price = ($Qty.val() * selectedAppliance.data('price'));
-            var downpayment = Math.round(price * 0.25);
+            var downpayment = Math.round((price + (price * 0.03)) * 0.25);
             if ($Discount.val() == 'No Downpayment') {
                 // No downpayment, apply 3% interest
                 return 0;
             } 
             else if(!["No Discount", "No Interest", "", null].includes($Discount.val())) {
-              var discount = discounts.find(discount => discount.id === $Discount.val());  
+              var discount = discounts.find(discount => discount.id == $Discount.val());  
               downpayment = Math.round(price * discount.downpayment_percentage);
             }
             return downpayment;
