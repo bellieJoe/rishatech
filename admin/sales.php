@@ -464,7 +464,7 @@ require_once 'templates/admin_header.php';
 
 
             if($PaymentType.val() === 'Credit' ) {
-                var interest = 0.03;
+                var interest = getInterestRate();
                 if($Discount.val() === 'No Discount') {
                     return price + ((price) * interest);
                 }
@@ -487,9 +487,10 @@ require_once 'templates/admin_header.php';
 
         // Calculate downpayment (25% of total price)
         function calculateDownPayment() {
+            const interestRate = getInterestRate();
             const selectedAppliance = $Appliances.find(':selected');
             const price = ($Qty.val() * selectedAppliance.data('price'));
-            var downpayment = Math.round((price + (price * 0.03)) * 0.25);
+            var downpayment = Math.round((price + (price * interestRate)) * 0.25);
             if ($Discount.val() == 'No Downpayment') {
                 // No downpayment, apply 3% interest
                 return 0;
@@ -564,6 +565,21 @@ require_once 'templates/admin_header.php';
                     </tr>
                 `);
             }
+        }
+
+        function getInterestRate() {
+            const interest = 0.03;
+            if($Discount.val() == "No Interest") {
+                return 0;
+            }
+            if(!["No Discount", "", null].includes($Discount.val())) {
+                var discount = discounts.find(discount => discount.id == $Discount.val());  
+                return discount.interest_percentage;
+            }
+            if($MonthsToPay.val()) {
+                return (3 * $MonthsToPay.val() / 100);
+            }
+            return interest;
         }
     });
 </script>

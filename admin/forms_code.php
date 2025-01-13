@@ -1190,7 +1190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
                 if ($discount == 'No Downpayment') {
                     // No downpayment, apply 3% interest
                     $downpayment = 0;
-                    $interest = 0.03 * $total_price; // 3% interest
+                    $interest = ((3 * $months_to_pay) / 100)  * $total_price; // 3% interest
                     $price_plus_interest = $total_price + $interest;
                     $total_sales = $price_plus_interest; // Total sales with interest
                     $monthly_payment = $total_sales / $months_to_pay; // Spread payment over months
@@ -1201,7 +1201,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_requirements'])
                     $monthly_payment = $price_plus_interest / $months_to_pay; // Spread payment over months
                 } else if($discount == 'No Discount') {
 
-                    $interest = 0.03 * ($total_price); // 3% interest on remaining amount
+                    $interest = ((3 * $months_to_pay) / 100) * ($total_price); // 3% interest on remaining amount
                     $downpayment = 0.25 * ($total_price + $interest); // 25% downpayment
                     $price_plus_interest = $total_price + $interest;
                     $total_sales = $price_plus_interest; // Total sales with interest

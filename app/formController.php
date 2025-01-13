@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ClientLogin'])) {
                 "status" => "error",
                 "message" => "ERROR! Failed to login. Try again."
             ];
-            header("location: ".BASE_URL."/client/index.php");
+            header("location: ".BASE_URL."/client/signin.php");
             exit();
         }
 
