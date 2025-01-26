@@ -229,5 +229,189 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['resetPassword'])) {
         exit();
     }
 }
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['uploadImage'])) {
+
+    try {
+
+        $customer_id = $_SESSION['user']['customer_id'];
+
+        if (isset($_FILES['image'])) {
+            $image_file_name = uniqid() . '-' . $_FILES['image']['name'];
+            $image_file_tmp = $_FILES['image']['tmp_name'];
+            $image_upload_dir = "uploads/c_image/";
+            $image_upload_path = $image_upload_dir . $image_file_name;
+    
+            move_uploaded_file($image_file_tmp, $image_upload_path);
+            $image = $db->updateImage($customer_id, $image_upload_path);
+            if (!$image) {
+                $_SESSION['message'] = [
+                    "status" => "error",
+                    "message" => "No account found with that email address."
+                ];
+                header("Location: " . BASE_URL . "/client/profile.php");
+                exit();
+            }
+        } else {
+            $image_upload_path = ''; // Save empty if no file is uploaded
+        }
+
+        $_SESSION["user"]["image"] = $image_upload_path;
+
+        $_SESSION['message'] = [
+            "status" => "success",
+            "message" => "Image uploaded successfully."
+        ];
+        header("Location: " . BASE_URL . "/client/profile.php");
+        exit();
+
+    } catch (\Throwable $th) {
+        echo $th;
+        exit();
+        $_SESSION['message'] = [
+            "status" => "error",
+            "message" => "An unexpected error occurred while sending the password reset link. Try again."
+        ];
+        header("Location: " . BASE_URL . "/client/profile.php");
+        exit();
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_profile'])) {
+
+    try {
+
+        $customer_id = $_SESSION['user']['customer_id'];
+
+        $user_id = $_SESSION['user']['user_id'];
+
+        $userWithSameEmail = $db->findUserByEmail(sanitizeInput($_POST['email']), $user_id);
+
+        if ($userWithSameEmail) {
+            $_SESSION['message'] = [
+                "status" => "error",
+                "message" => "Email already exists."
+            ];
+            header("Location: " . BASE_URL . "/client/profile.php");
+            exit();
+        }
+
+        $userWithSameUsername = $db->findUserByUsername(sanitizeInput($_POST['username']), $user_id);
+
+        if ($userWithSameUsername) {
+            $_SESSION['message'] = [
+                "status" => "error",
+                "message" => "Username already exists."
+            ];
+            header("Location: " . BASE_URL . "/client/profile.php");
+            exit();
+        }
+
+        if(!$db->updateUsername($user_id, sanitizeInput($_POST['username']))) {
+            $_SESSION['message'] = [
+                "status" => "error",
+                "message" => "Unable to update Username."
+            ];
+            header("Location: " . BASE_URL . "/client/profile.php");
+            exit();
+        }
+
+        if(!$db->updateEmail($user_id, sanitizeInput($_POST['email']))) {
+
+            $_SESSION['message'] = [
+                "status" => "error",
+                "message" => "Unable to update Email."
+            ];
+            header("Location: " . BASE_URL . "/client/profile.php");
+            exit();
+        }
+
+        $_SESSION["user"]["username"] = sanitizeInput($_POST['username']);
+        $_SESSION["user"]["email"] = sanitizeInput($_POST['email']);
+
+
+        $_SESSION['message'] = [
+            "status" => "success",
+            "message" => "Profile updated successfully."
+        ];
+        header("Location: " . BASE_URL . "/client/profile.php");
+        exit();
+
+    } catch (\Throwable $th) {
+        echo $th;
+        exit();
+        $_SESSION['message'] = [
+            "status" => "error",
+            "message" => "An unexpected error occurred while sending the password reset link. Try again."
+        ];
+        header("Location: " . BASE_URL . "/client/profile.php");
+        exit();
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change_password'])) {
+
+    try {
+
+        $old_password = sanitizeInput($_POST['old_password']);
+        $new_password = sanitizeInput($_POST['new_password']);
+        $confirm_new_password = sanitizeInput($_POST['confirm_new_password']);
+
+        if ($new_password !== $confirm_new_password) {
+            $_SESSION['message'] = [
+                "status" => "error",
+                "message" => "Passwords do not match."
+            ];
+            header("Location: " . BASE_URL . "/client/profile.php");
+            exit();
+        }
+
+        $user = $db->getUserById($_SESSION['user']['user_id']);
+
+        if(!$user){
+            $_SESSION['message'] = [
+                "status" => "error",
+                "message" => "No account found."
+            ];
+            header("Location: " . BASE_URL . "/client/profile.php");
+            exit();
+        }
+
+        if(!password_verify($old_password, $user['password'])) {
+            $_SESSION['message'] = [
+                "status" => "error",
+                "message" => "Old password is incorrect."
+            ];
+            header("Location: " . BASE_URL . "/client/profile.php");
+            exit();
+        }
+
+        if(!$db->updatePassword(password_hash($new_password, PASSWORD_DEFAULT), $user['user_id'])) {
+            $_SESSION['message'] = [
+                "status" => "error",
+                "message" => "Unable to update Password."
+            ];
+            header("Location: " . BASE_URL . "/client/profile.php");
+            exit();
+        }
+
+
+        $_SESSION['message'] = [
+            "status" => "success",
+            "message" => "Password updated successfully."
+        ];
+        header("Location: " . BASE_URL . "/client/profile.php");
+        exit();
+
+    } catch (\Throwable $th) {
+        echo $th;
+        exit();
+        $_SESSION['message'] = [
+            "status" => "error",
+            "message" => "An unexpected error occurred while sending the password reset link. Try again."
+        ];
+        header("Location: " . BASE_URL . "/client/profile.php");
+        exit();
+    }
+}
 
 ?>

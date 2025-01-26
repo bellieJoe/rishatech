@@ -104,7 +104,7 @@ require_once 'templates/admin_header.php';
                     echo "<h4>Sales Report from $startDate to $endDate</h4>";
                     echo "<table class='table table-bordered'><tr><th>Month</th><th>Total Sales</th></tr>";
                     foreach ($salesData as $row) {
-                        echo "<tr><td>{$row['period']}</td><td>{$row['total_sales']}</td></tr>";
+                        echo "<tr><td>{$row['period']}</td><td>" . number_format($row['total_sales'], 2, '.', ',') . "</td></tr>";
                     }
                     echo "</table>";
                 } elseif ($reportType == 'aging') {
@@ -121,7 +121,7 @@ require_once 'templates/admin_header.php';
                     echo "<h4>Aging Report (Outstanding Payments) from $startDate to $endDate</h4>";
                     echo "<table class='table table-bordered'><tr><th>Customer Name</th><th>Payment Date</th><th>Amount Due</th><th>Status</th></tr>";
                     foreach ($agingData as $row) {
-                        echo "<tr><td>{$row['customer_name']}</td><td>{$row['payment_date']}</td><td>{$row['amount_paid']}</td><td>{$row['payment_status']}</td></tr>";
+                        echo "<tr><td>{$row['customer_name']}</td><td>{$row['payment_date']}</td><td>". number_format($row['amount_paid'], 2, '.', ',') ."</td><td>{$row['payment_status']}</td></tr>";
                     }
                     echo "</table>";
                 } elseif ($reportType == 'creditUsage') {
@@ -138,7 +138,7 @@ require_once 'templates/admin_header.php';
                     echo "<h4>Credit Usage Report from $startDate to $endDate</h4>";
                     echo "<table class='table table-bordered'><tr><th>Customer Name</th><th>Total Credits</th><th>Total Credit Amount</th></tr>";
                     foreach ($creditData as $row) {
-                        echo "<tr><td>{$row['customer_name']}</td><td>{$row['total_credits']}</td><td>{$row['total_credit_amount']}</td></tr>";
+                        echo "<tr><td>{$row['customer_name']}</td><td>{$row['total_credits']}</td><td>". number_format($row['total_credit_amount'], 2, '.', ',') ."</td></tr>";
                     }
                     echo "</table>";
                 }

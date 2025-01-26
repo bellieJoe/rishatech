@@ -490,14 +490,14 @@ require_once 'templates/admin_header.php';
             const interestRate = getInterestRate();
             const selectedAppliance = $Appliances.find(':selected');
             const price = ($Qty.val() * selectedAppliance.data('price'));
-            var downpayment = Math.round((price + (price * interestRate)) * 0.25);
+            var downpayment = (price + (price * interestRate)) * 0.25;
             if ($Discount.val() == 'No Downpayment') {
                 // No downpayment, apply 3% interest
                 return 0;
             } 
             else if(!["No Discount", "No Interest", "", null].includes($Discount.val())) {
               var discount = discounts.find(discount => discount.id == $Discount.val());  
-              downpayment = Math.round(price * discount.downpayment_percentage);
+              downpayment = price * discount.downpayment_percentage;
             }
             return downpayment;
         }
@@ -569,10 +569,11 @@ require_once 'templates/admin_header.php';
 
         function getInterestRate() {
             const interest = 0.03;
+            console.log($Discount.val())
             if($Discount.val() == "No Interest") {
                 return 0;
             }
-            if(!["No Discount", "", null].includes($Discount.val())) {
+            if(!["No Discount", "", null, "No Downpayment"].includes($Discount.val())) {
                 var discount = discounts.find(discount => discount.id == $Discount.val());  
                 return discount.interest_percentage;
             }

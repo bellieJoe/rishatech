@@ -1473,6 +1473,15 @@ public function getUserById($id) {
     return $result;
 }
 
+public function updateImage($id, $filename) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE customers SET image = ? WHERE id = ?");
+    $stmt->execute([$filename, $id]);
+
+    return $stmt;
+}
+
 public function updatePassword($id, $password) {
     $connection = $this->getConnection();
 
@@ -1514,6 +1523,46 @@ public function getApplianceByNameAndBrandId($name, $category_id) {
     return $result;
 }
 
+public function updateUsername($id, $username) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE users SET username = ? WHERE id = ?");
+    $result = $stmt->execute([$username, $id]);
+
+    return $result;
+}
+
+public function updateEmail($id, $email) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("UPDATE customers SET email = ? WHERE id = ?");
+    $result = $stmt->execute([$email, $id]);
+
+    return $result;
+
+}
+
+public function findUserByUsername($username, $user_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM users WHERE username = ? AND id != ?");
+    $stmt->execute([$username, $user_id]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+public function findUserByEmail($email, $user_id) {
+    $connection = $this->getConnection();
+
+    $stmt = $connection->prepare("SELECT * FROM customers WHERE email = ? AND user_id != ?");
+    $stmt->execute([$email, $user_id]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result;
+}
 }
 
 
