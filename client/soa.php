@@ -147,7 +147,7 @@
                         ?>
                         <tr>
                             <td><?= $index ?></td>
-                            <td><?= "PHP " . number_format($sales['monthly_payment'], 2) ?></td>
+                            <td><?= "PHP " . number_format($sales['monthly_payment'], 2, '.', ',') ?></td>
                             <td><?= date("M d, Y", strtotime($payment['payment_date'])) ?></td>
                             <td><?= $payment['date_paid'] == null ? "-" : date("M d, Y", strtotime($payment['date_paid'])) ?></td>
                             <td><?= "PHP " . number_format($payment['amount_paid'], 2) ?></td>
